@@ -59,13 +59,15 @@ function initSwitches(root, { postJson, toast }) {
 
 // Перетаскивание только за ручку: остальная строка остаётся для прокрутки пальцем.
 // Пока порядок сохраняется, перетаскивание выключено; при ошибке на экран возвращается прежний порядок.
+// При перетаскивании пальцем SortableJS кладёт в список свою копию строки (fallbackClass) ещё до onStart:
+// в прежний порядок она не входит, иначе при ошибке вернулась бы в список и осталась висеть на экране.
 function sortable(list, { draggable, handle, toBody, url }, { postJson, toast }) {
   let before = []
   const sorter = window.Sortable.create(list, {
     draggable,
     handle,
     animation: 150,
-    onStart: () => { before = [...list.children] },
+    onStart: () => { before = [...list.children].filter(el => !el.classList.contains(sorter.options.fallbackClass)) },
     async onEnd(event) {
       if (event.oldIndex === event.newIndex) return
       sorter.option('disabled', true)

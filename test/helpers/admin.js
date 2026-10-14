@@ -13,6 +13,25 @@ export function form(fields) {
   }
 }
 
+// Тело multipart/form-data как у браузера: строки — текстовые поля, объект { filename, content, type } — файл.
+export function multipart(fields) {
+  const boundary = '----yaqin-test-boundary'
+  const chunks = []
+  for (const [name, value] of Object.entries(fields)) {
+    if (typeof value === 'string') {
+      chunks.push(Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="${name}"\r\n\r\n${value}\r\n`))
+    } else {
+      chunks.push(
+        Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="${name}"; filename="${value.filename}"\r\nContent-Type: ${value.type}\r\n\r\n`),
+        value.content,
+        Buffer.from('\r\n')
+      )
+    }
+  }
+  chunks.push(Buffer.from(`--${boundary}--\r\n`))
+  return { payload: Buffer.concat(chunks), headers: { 'content-type': `multipart/form-data; boundary=${boundary}` } }
+}
+
 // «name=value» из заголовков Set-Cookie ответа (значение остаётся закодированным, как его отдал сервер).
 export function cookiePair(res, name) {
   const header = [].concat(res.headers['set-cookie'] ?? []).find(line => line.startsWith(`${name}=`))

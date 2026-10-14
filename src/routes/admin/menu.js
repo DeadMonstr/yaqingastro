@@ -40,7 +40,7 @@ const viewMenu = menu => menu.map(category => ({
   dishes: category.dishes.map(dish => ({
     id: dish.id,
     name: dish.name_ru,
-    price: formatPrice(dish.price),
+    price: `${formatPrice(dish.price)}\u00a0сум`,
     thumb: dish.image ? imageUrl(dish.image, THUMB_WIDTH) : null,
     visible: dish.is_visible
   }))

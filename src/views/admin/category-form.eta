@@ -1,0 +1,51 @@
+<% layout('./layout') %>
+<%
+const { values, errors } = it
+const action = it.category ? `/admin/categories/${it.category.id}` : '/admin/categories'
+%>
+<a class="back-link" href="/admin">← Меню</a>
+<h1 class="page-title"><%= it.title %></h1>
+
+<form class="card" method="post" action="<%= action %>">
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+<% if (it.formError) { %>
+  <p class="alert" role="alert"><%= it.formError %></p>
+<% } %>
+<%~ include('./partials/lang-tabs') %>
+<% for (const lang of ['ru', 'uz', 'en']) {
+  const name = `name_${lang}`
+%>
+  <div class="field" data-lang="<%= lang %>">
+    <label class="field__label" for="<%= name %>">Название (<%= lang.toUpperCase() %>)</label>
+    <input class="field__input" id="<%= name %>" name="<%= name %>" type="text" value="<%= values[name] %>" autocomplete="off"<% if (lang === 'ru') { %> aria-required="true"<% } %><% if (errors[name]) { %> aria-invalid="true" aria-describedby="<%= name %>-error"<% } %>>
+<% if (errors[name]) { %>
+    <p class="field-error" id="<%= name %>-error"><%= errors[name] %></p>
+<% } else { %>
+    <p class="field__hint"><%= lang === 'ru' ? 'Обязательно, до 60 символов' : 'До 60 символов' %></p>
+<% } %>
+  </div>
+<% } %>
+  <div class="field">
+    <label class="field__label" for="slug">Адрес (slug)</label>
+    <input class="field__input" id="slug" name="slug" type="text" value="<%= values.slug %>" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"<% if (errors.slug) { %> aria-invalid="true" aria-describedby="slug-error"<% } %>>
+<% if (errors.slug) { %>
+    <p class="field-error" id="slug-error"><%= errors.slug %></p>
+<% } else { %>
+    <p class="field__hint">Латиница, цифры и дефис. Если оставить пустым, адрес получится из названия.</p>
+<% } %>
+  </div>
+  <label class="toggle-row">
+    <span class="toggle-row__text">Показывать на сайте</span>
+    <input class="switch" type="checkbox" role="switch" name="is_visible" value="on"<% if (values.is_visible) { %> checked<% } %>>
+  </label>
+  <div class="form-actions">
+    <button class="btn btn--primary btn--block" type="submit">Сохранить</button>
+  </div>
+</form>
+<% if (it.category) { %>
+
+<form class="danger-zone" method="post" action="/admin/categories/<%= it.category.id %>/delete" data-confirm="Удалить категорию?">
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+  <button class="btn btn--danger btn--block" type="submit">Удалить</button>
+</form>
+<% } %>

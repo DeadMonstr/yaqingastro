@@ -48,7 +48,8 @@ body {
 /* Место под нижнюю навигацию. */
 .admin--nav { padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom)); }
 a { color: var(--green-900); }
-button, input { font: inherit; }
+button, input, select, textarea { font: inherit; }
+[hidden] { display: none !important; }
 /* Тёмно-зелёное кольцо на светлом фоне (контраст около 12:1); на тёмной шапке — светло-золотое, ниже. */
 :focus-visible { outline: 3px solid var(--green-900); outline-offset: 2px; }
 
@@ -178,13 +179,16 @@ button, input { font: inherit; }
   border-radius: 10px;
 }
 .field__hint,
-.field__error {
+.field__error,
+.field-error {
   margin: 6px 0 0;
   font-size: 14px;
 }
 .field__hint { color: var(--ink-4); }
-.field__error { font-weight: 600; color: var(--danger); }
-.field--error .field__input { border-color: var(--danger); border-width: 2px; }
+.field__error,
+.field-error { font-weight: 600; color: var(--danger); }
+.field--error .field__input,
+.field__input[aria-invalid="true"] { border-color: var(--danger); border-width: 2px; }
 
 .alert {
   margin: 0 0 16px;
@@ -215,6 +219,8 @@ button, input { font: inherit; }
 .btn--primary:hover { background: var(--gold-light); }
 .btn--outline { background: transparent; color: var(--green-900); border-color: var(--green-900); }
 .btn--outline:hover { background: var(--green-900); color: var(--cream); }
+.btn--danger { background: transparent; color: var(--danger); border-color: var(--danger); }
+.btn--danger:hover { background: var(--danger-solid); color: #fff; border-color: var(--danger-solid); }
 
 /* Кнопка «Сохранить» прилипает к низу экрана, на телефоне — над нижней навигацией. */
 .form-actions {
@@ -432,6 +438,110 @@ button, input { font: inherit; }
   background: var(--ivory);
   border-top: 1px solid var(--line-2);
 }
+
+/* ---------- Формы категории и блюда ---------- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -8px 0 4px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.back-link:hover { text-decoration: underline; }
+
+.field__input--area {
+  min-height: 96px;
+  padding: 12px 14px;
+  line-height: 1.4;
+  resize: vertical;
+}
+select.field__input { padding-right: 8px; }
+/* Количество и единица в одну строку. */
+.field-row { display: grid; grid-template-columns: 1fr 96px; gap: 8px; }
+
+/* Переключатель языка: без JS скрыт, и тогда видны поля всех трёх языков. */
+.lang-tabs {
+  display: none;
+  gap: 4px;
+  margin: 0 0 16px;
+  padding: 4px;
+  background: var(--cream);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+}
+.js .lang-tabs { display: flex; }
+.lang-tabs__btn {
+  position: relative;
+  flex: 1;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+}
+.lang-tabs__btn[aria-pressed="true"] { background: var(--green-900); color: var(--cream); }
+/* Красная точка после названия языка: на этой вкладке есть ошибка. */
+.lang-tabs__btn.has-error::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 6px;
+  vertical-align: 2px;
+  background: var(--danger);
+  border: 2px solid var(--card-bg);
+  border-radius: 50%;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  margin: 0 0 8px;
+  cursor: pointer;
+}
+.toggle-row__text { font-weight: 600; }
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.check__box { flex: none; width: 24px; height: 24px; margin: 0; accent-color: var(--green-900); }
+
+/* Фото: текущее и выбранное, кнопка «Выбрать фото». Сам <input type="file"> скрыт визуально, но доступен с клавиатуры. */
+.field--photo { position: relative; }
+.photo-current { margin: 0 0 12px; }
+.photo-img {
+  display: block;
+  width: 160px;
+  height: 160px;
+  margin: 0 0 12px;
+  object-fit: cover;
+  background: var(--cream);
+  border-radius: 12px;
+}
+.photo-current .photo-img { margin-bottom: 4px; }
+.file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.file-input:focus-visible + .btn { outline: 3px solid var(--green-900); outline-offset: 2px; }
+
+.danger-zone { margin: 0 0 20px; }
 
 /* ---------- От 768 px: навигация переезжает в шапку ---------- */
 @media (min-width: 768px) {

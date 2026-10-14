@@ -1,0 +1,106 @@
+<% layout('./layout') %>
+<%
+const { values, errors } = it
+const action = it.dish ? `/admin/dishes/${it.dish.id}` : '/admin/dishes'
+const units = [{ id: 'g', label: 'г' }, { id: 'ml', label: 'мл' }, { id: 'pcs', label: 'шт' }]
+%>
+<a class="back-link" href="/admin">← Меню</a>
+<h1 class="page-title"><%= it.title %></h1>
+
+<form class="card" method="post" action="<%= action %>" enctype="multipart/form-data">
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+<%~ include('./partials/lang-tabs') %>
+<% for (const lang of ['ru', 'uz', 'en']) {
+  const up = lang.toUpperCase()
+  const name = `name_${lang}`
+  const desc = `desc_${lang}`
+%>
+  <div class="field" data-lang="<%= lang %>">
+    <label class="field__label" for="<%= name %>">Название (<%= up %>)</label>
+    <input class="field__input" id="<%= name %>" name="<%= name %>" type="text" value="<%= values[name] %>" autocomplete="off"<% if (lang === 'ru') { %> aria-required="true"<% } %><% if (errors[name]) { %> aria-invalid="true" aria-describedby="<%= name %>-error"<% } %>>
+<% if (errors[name]) { %>
+    <p class="field-error" id="<%= name %>-error"><%= errors[name] %></p>
+<% } else { %>
+    <p class="field__hint"><%= lang === 'ru' ? 'Обязательно, до 120 символов' : 'До 120 символов' %></p>
+<% } %>
+  </div>
+  <div class="field" data-lang="<%= lang %>">
+    <label class="field__label" for="<%= desc %>">Описание (<%= up %>)</label>
+    <textarea class="field__input field__input--area" id="<%= desc %>" name="<%= desc %>" rows="3"<% if (errors[desc]) { %> aria-invalid="true" aria-describedby="<%= desc %>-error"<% } %>><%= values[desc] %></textarea>
+<% if (errors[desc]) { %>
+    <p class="field-error" id="<%= desc %>-error"><%= errors[desc] %></p>
+<% } else { %>
+    <p class="field__hint">До 500 символов</p>
+<% } %>
+  </div>
+<% } %>
+  <div class="field">
+    <label class="field__label" for="category_id">Категория</label>
+    <select class="field__input" id="category_id" name="category_id"<% if (errors.category_id) { %> aria-invalid="true" aria-describedby="category_id-error"<% } %>>
+<% for (const category of it.categories) { %>
+      <option value="<%= category.id %>"<% if (String(category.id) === values.category_id) { %> selected<% } %>><%= category.name %></option>
+<% } %>
+    </select>
+<% if (errors.category_id) { %>
+    <p class="field-error" id="category_id-error"><%= errors.category_id %></p>
+<% } %>
+  </div>
+  <div class="field">
+    <label class="field__label" for="amount">Вес или объём</label>
+    <div class="field-row">
+      <input class="field__input" id="amount" name="amount" type="text" inputmode="numeric" autocomplete="off" value="<%= values.amount %>"<% if (errors.amount) { %> aria-invalid="true" aria-describedby="amount-error"<% } %>>
+      <select class="field__input" name="unit" aria-label="Единица">
+<% for (const unit of units) { %>
+        <option value="<%= unit.id %>"<% if (values.unit === unit.id) { %> selected<% } %>><%= unit.label %></option>
+<% } %>
+      </select>
+    </div>
+<% if (errors.amount) { %>
+    <p class="field-error" id="amount-error"><%= errors.amount %></p>
+<% } else { %>
+    <p class="field__hint">Можно оставить пустым</p>
+<% } %>
+  </div>
+  <div class="field">
+    <label class="field__label" for="price">Цена, сум</label>
+    <input class="field__input" id="price" name="price" type="text" inputmode="numeric" autocomplete="off" value="<%= values.price %>"<% if (errors.price) { %> aria-invalid="true" aria-describedby="price-error"<% } %>>
+<% if (errors.price) { %>
+    <p class="field-error" id="price-error"><%= errors.price %></p>
+<% } %>
+  </div>
+  <div class="field field--photo">
+    <span class="field__label">Фото</span>
+<% if (it.dish && it.dish.photo) { %>
+    <div class="photo-current">
+      <img class="photo-img" src="<%= it.dish.photo %>" alt="<%= it.dish.name %>" width="160" height="160">
+      <label class="check">
+        <input class="check__box" type="checkbox" name="remove_photo" value="on"<% if (it.removePhoto) { %> checked<% } %>>
+        <span>Удалить фото</span>
+      </label>
+    </div>
+<% } %>
+    <img class="photo-img preview" alt="Выбранное фото" width="160" height="160" hidden>
+    <input class="file-input" id="photo" name="photo" type="file" accept="image/*" data-image-input<% if (errors.photo) { %> aria-invalid="true" aria-describedby="photo-error"<% } %>>
+    <label class="btn btn--outline" for="photo">Выбрать фото</label>
+<% if (errors.photo) { %>
+    <p class="field-error" id="photo-error"><%= errors.photo %></p>
+<% } %>
+<% if (it.retryPhoto) { %>
+    <p class="field__hint">Выберите фото заново</p>
+<% } %>
+  </div>
+  <label class="toggle-row">
+    <span class="toggle-row__text">Показывать на сайте</span>
+    <input class="switch" type="checkbox" role="switch" name="is_visible" value="on"<% if (values.is_visible) { %> checked<% } %>>
+  </label>
+  <div class="form-actions">
+    <button class="btn btn--primary btn--block" type="submit">Сохранить</button>
+  </div>
+</form>
+<% if (it.dish) { %>
+
+<form class="danger-zone" method="post" action="/admin/dishes/<%= it.dish.id %>/delete" data-confirm="Удалить блюдо?">
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+  <button class="btn btn--danger btn--block" type="submit">Удалить</button>
+</form>
+<% } %>

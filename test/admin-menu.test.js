@@ -22,6 +22,12 @@ test('menu screen lists categories, dishes and actions', async t => {
   assert.match(r.body, /href="\/admin\/categories\/new"/)
 })
 
+test('menu screen shows prices with no-break spaces', async t => {
+  const s = await setup(t)
+  const r = await s.a.inject({ url: '/admin', headers: { cookie: s.cookie } })
+  assert.match(r.body, /<span class="dish__price">95\u00a0000\u00a0сум<\/span>/)
+})
+
 test('menu screen loads SortableJS and the admin script with the asset version', async t => {
   const s = await setup(t)
   const r = await s.a.inject({ url: '/admin', headers: { cookie: s.cookie } })

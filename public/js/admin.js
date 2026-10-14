@@ -59,9 +59,18 @@ function init() {
 // Модули экранов подключаются тем же адресом с ?v=...: иначе браузер возьмёт их из кэша недельной давности.
 // Модуль не импортирует admin.js, а получает postJson и toast в init.
 async function loadFeatures() {
+  const search = new URL(import.meta.url).search
   if (document.querySelector('.dish-list')) {
-    const menu = await import('./admin-menu.js' + new URL(import.meta.url).search)
+    const menu = await import('./admin-menu.js' + search)
     menu.init({ postJson, toast })
+  }
+  if (document.querySelector('[data-lang-tabs]')) {
+    const tabs = await import('./admin-lang-tabs.js' + search)
+    tabs.init()
+  }
+  if (document.querySelector('[data-image-input]')) {
+    const image = await import('./admin-image-input.js' + search)
+    image.init()
   }
 }
 

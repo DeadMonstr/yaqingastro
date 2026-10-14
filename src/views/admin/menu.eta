@@ -32,7 +32,7 @@
           </span>
           <span class="dish__text">
             <span class="dish__name"><%= dish.name %></span>
-            <span class="dish__price"><%= dish.price %> сум</span>
+            <span class="dish__price"><%= dish.price %></span>
           </span>
         </a>
         <input class="switch" type="checkbox" role="switch" aria-label="Показывать на сайте: <%= dish.name %>" data-visibility-url="/admin/api/dishes/<%= dish.id %>/visibility"<% if (dish.visible) { %> checked<% } %>>

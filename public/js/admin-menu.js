@@ -1,5 +1,6 @@
 // Экран «Меню»: порядок категорий и блюд, видимость, запоминание раскрытых категорий.
 // Модуль подключает admin.js и передаёт ему postJson и toast: сам admin.js он не импортирует.
+// postJson бросает Error с текстом сервера или с сообщением «Нет связи…» — его и показываем владельцу.
 
 const OPEN_KEY = 'yaqin-admin-open'
 const SORT_ERROR = 'Не удалось сохранить порядок'
@@ -50,9 +51,9 @@ function initSwitches(root, { postJson, toast }) {
     try {
       await postJson(input.dataset.visibilityUrl, { visible })
       input.closest('.dish, .cat').classList.toggle('is-hidden', !visible)
-    } catch {
+    } catch (err) {
       input.checked = !visible
-      toast(SAVE_ERROR, true)
+      toast(err.message || SAVE_ERROR, true)
     }
   })
 }
@@ -73,9 +74,9 @@ function sortable(list, { draggable, handle, toBody, url }, { postJson, toast })
       sorter.option('disabled', true)
       try {
         await postJson(url, toBody([...list.children]))
-      } catch {
+      } catch (err) {
         list.append(...before)
-        toast(SORT_ERROR, true)
+        toast(err.message || SORT_ERROR, true)
       } finally {
         sorter.option('disabled', false)
       }

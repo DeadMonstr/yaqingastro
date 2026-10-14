@@ -45,6 +45,19 @@ function showPreview(preview, file) {
   preview.src = URL.createObjectURL(file)
 }
 
+// Пока снимок уменьшается, кнопки отправки его формы выключены: иначе уйдёт ещё не уменьшенный файл.
+// В одной форме бывает несколько полей фото (галерея), поэтому считаем, сколько из них сейчас заняты.
+const busy = new WeakMap()
+
+function setBusy(form, on) {
+  if (!form) return
+  const count = (busy.get(form) ?? 0) + (on ? 1 : -1)
+  busy.set(form, count)
+  for (const el of form.elements) {
+    if (el.type === 'submit') el.disabled = count > 0
+  }
+}
+
 function setup(input) {
   const preview = input.closest('.field')?.querySelector('.preview')
   // Формат, который браузер не показывает (например HEIC), — предпросмотра нет, но файл уйдёт на сервер как есть.
@@ -54,6 +67,8 @@ function setup(input) {
     const original = input.files?.[0]
     if (!original) return showPreview(preview, null)
 
+    const { form } = input
+    setBusy(form, true)
     let chosen = original
     try {
       const small = await downscale(original)
@@ -65,6 +80,8 @@ function setup(input) {
       chosen = small
     } catch {
       // оставляем исходный файл
+    } finally {
+      setBusy(form, false)
     }
     showPreview(preview, chosen)
   })

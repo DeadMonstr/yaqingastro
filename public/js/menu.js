@@ -84,8 +84,11 @@
     if (sheet.open) return
     const photo = card.querySelector('.dish__media img')
     if (photo) {
+      // Сначала уже загруженное фото из сетки (без srcset оно ставится сразу), затем крупное:
+      // пока оно грузится, видно это блюдо, а не прошлое.
+      img.removeAttribute('srcset')
+      img.src = photo.currentSrc || photo.src
       img.srcset = photo.getAttribute('srcset')
-      img.src = photo.getAttribute('src')
       img.alt = photo.alt
     }
     img.hidden = !photo

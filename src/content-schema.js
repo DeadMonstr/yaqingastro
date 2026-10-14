@@ -77,25 +77,25 @@ export const CONTENT_SCHEMA = [
         uz: 'Mazali taomlar',
         en: 'Great food'
       }),
-      text('about.f2.title', 'Преимущество 2: заголовок', {
-        ru: 'Кофе и десерты',
-        uz: 'Qahva va desertlar',
-        en: 'Coffee & desserts'
-      }),
-      text('about.f3.title', 'Преимущество 3: заголовок', {
-        ru: 'Онлайн-заказ',
-        uz: 'Onlayn buyurtma',
-        en: 'Order online'
-      }),
       text('about.f1.text', 'Преимущество 1: текст', {
         ru: 'Европейская и узбекская кухня',
         uz: 'Yevropa va o’zbek oshxonasi',
         en: 'European and Uzbek cuisine'
       }),
+      text('about.f2.title', 'Преимущество 2: заголовок', {
+        ru: 'Кофе и десерты',
+        uz: 'Qahva va desertlar',
+        en: 'Coffee & desserts'
+      }),
       text('about.f2.text', 'Преимущество 2: текст', {
         ru: 'Авторский кофе и выпечка',
         uz: 'Mualliflik qahvasi va pishiriqlar',
         en: 'Specialty coffee and pastries'
+      }),
+      text('about.f3.title', 'Преимущество 3: заголовок', {
+        ru: 'Онлайн-заказ',
+        uz: 'Onlayn buyurtma',
+        en: 'Order online'
       }),
       text('about.f3.text', 'Преимущество 3: текст', {
         ru: 'Закажите заранее — заберёте без ожидания',

@@ -100,3 +100,10 @@ test('saveContent upserts existing keys and deleteContent drops several', () => 
   deleteContent(db, ['contacts.telegram', 'hero.image'])
   assert.deepEqual(getStoredContent(db), { 'contacts.phone': '+998 2' })
 })
+
+test('about features are ordered per feature: title then text', () => {
+  assert.deepEqual(getGroup('about').fields.map(f => f.key), [
+    'about.title', 'about.p1', 'about.p2', 'about.image',
+    'about.f1.title', 'about.f1.text', 'about.f2.title', 'about.f2.text', 'about.f3.title', 'about.f3.text'
+  ])
+})

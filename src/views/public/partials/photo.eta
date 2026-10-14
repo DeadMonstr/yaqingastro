@@ -1,5 +1,5 @@
 <% if (it.image) { %>
-<img class="photo" src="<%= it.image.src %>" srcset="<%= it.image.srcset %>" sizes="<%= it.sizes %>" alt="" loading="lazy">
+<img class="photo" src="<%= it.image.src %>" srcset="<%= it.image.srcset %>" sizes="<%= it.sizes %>" alt="<%= it.alt ?? '' %>" loading="lazy">
 <% } else { %>
 <div class="ph" aria-hidden="true">YAQIN</div>
 <% } %>

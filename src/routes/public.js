@@ -1,12 +1,47 @@
-import { DEFAULT_LANG, LANGS, isLang } from '../services/i18n.js'
-import { imageUrl } from '../services/images.js'
+import { DEFAULT_LANG, LANGS, formatPrice, isLang, pick } from '../services/i18n.js'
+import { imageSrcset, imageUrl } from '../services/images.js'
 import { localizeContent, resolveContent } from '../content-schema.js'
 import { getStoredContent } from '../repos/content.js'
+import { getPublicMenu } from '../repos/menu.js'
 import { commonData, contactLinks } from './public-common.js'
 
 const LANG_COOKIE_MAX_AGE = 365 * 24 * 60 * 60
 const OG_IMAGE_WIDTH = 1200
 const DEFAULT_HERO = '/static/img/hero-default.webp'
+const DISH_THUMB_WIDTH = 400
+
+// Редактируемые тексты сайта на языке страницы.
+const siteContent = (app, lang) => localizeContent(resolveContent(getStoredContent(app.db)), lang)
+
+// Мета-данные страницы: описание и картинка для соцсетей берутся с первого экрана главной.
+function pageMeta(app, common, c, title) {
+  const hero = c['hero.image']
+  return {
+    ...common.meta,
+    title,
+    description: c['hero.description'],
+    ogImage: app.config.publicUrl + (hero ? imageUrl(hero.id, OG_IMAGE_WIDTH) : DEFAULT_HERO)
+  }
+}
+
+const rememberLang = (reply, lang) =>
+  reply.setCookie('lang', lang, { path: '/', maxAge: LANG_COOKIE_MAX_AGE, sameSite: 'lax' })
+
+// Меню в виде, готовом для шаблона: тексты на языке страницы, цена и количество строками.
+function localizeMenu(menu, lang, ui) {
+  return menu.map(category => ({
+    slug: category.slug,
+    name: pick(category, 'name', lang),
+    dishes: category.dishes.map(dish => ({
+      id: dish.id,
+      name: pick(dish, 'name', lang),
+      desc: pick(dish, 'desc', lang),
+      amount: dish.amount ? `${dish.amount} ${ui.units[dish.unit] ?? ''}`.trim() : '',
+      price: formatPrice(dish.price),
+      image: dish.image ? { src: imageUrl(dish.image, DISH_THUMB_WIDTH), srcset: imageSrcset(dish.image) } : null
+    }))
+  }))
+}
 
 export default async function publicRoutes(app) {
   const { publicUrl } = app.config
@@ -34,17 +69,24 @@ export default async function publicRoutes(app) {
     const { lang } = request.params
     if (!isLang(lang)) return reply.callNotFound()
 
-    const c = localizeContent(resolveContent(getStoredContent(app.db)), lang)
+    const c = siteContent(app, lang)
     const common = commonData(app.config, lang, '')
-    const hero = c['hero.image']
-    const meta = {
-      ...common.meta,
-      title: `YAQIN Gastro Cafe — ${c['hero.tagline']}`,
-      description: c['hero.description'],
-      ogImage: publicUrl + (hero ? imageUrl(hero.id, OG_IMAGE_WIDTH) : DEFAULT_HERO)
-    }
+    const meta = pageMeta(app, common, c, `YAQIN Gastro Cafe — ${c['hero.tagline']}`)
 
-    reply.setCookie('lang', lang, { path: '/', maxAge: LANG_COOKIE_MAX_AGE, sameSite: 'lax' })
+    rememberLang(reply, lang)
     return reply.view('public/home', { ...common, meta, c, links: contactLinks(c), defaultHero: DEFAULT_HERO })
+  })
+
+  app.get('/:lang/menu', async (request, reply) => {
+    const { lang } = request.params
+    if (!isLang(lang)) return reply.callNotFound()
+
+    const c = siteContent(app, lang)
+    const common = commonData(app.config, lang, '/menu')
+    const meta = pageMeta(app, common, c, `${common.ui.menuTitle} — YAQIN Gastro Cafe`)
+    const menu = localizeMenu(getPublicMenu(app.db), lang, common.ui)
+
+    rememberLang(reply, lang)
+    return reply.view('public/menu', { ...common, meta, c, menu, mainClass: 'menu-page' })
   })
 }

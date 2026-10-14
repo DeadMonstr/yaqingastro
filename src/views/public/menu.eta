@@ -1,0 +1,76 @@
+<% layout('./layout') %>
+<%
+const { c, ui, menu } = it
+%>
+<section class="menu-intro">
+  <div class="menu-intro__inner">
+    <div>
+      <div class="menu-intro__eyebrow">Yaqin · Gastro Cafe</div>
+      <h1 class="menu-intro__title"><%= ui.menuTitle %></h1>
+    </div>
+    <div class="menu-intro__meta">
+      <span class="menu-intro__hours"><%= c['info.hours'] %></span>
+      <span class="menu-intro__note"><%= ui.menuNote %></span>
+    </div>
+  </div>
+</section>
+
+<% if (menu.length) { %>
+<div class="tabs-bar">
+  <nav class="tabs" aria-label="<%= ui.menuTitle %>">
+<% for (const cat of menu) { %>
+    <a class="tab" href="#cat-<%= cat.slug %>" data-tab="<%= cat.slug %>"><%= cat.name %></a>
+<% } %>
+  </nav>
+</div>
+<% } %>
+
+<div class="menu-cats">
+<% for (const cat of menu) { %>
+  <section id="cat-<%= cat.slug %>" class="menu-cat">
+    <div class="menu-cat__head">
+      <h2 class="menu-cat__title"><%= cat.name %></h2>
+      <span class="menu-cat__rule" aria-hidden="true"></span>
+    </div>
+    <div class="dish-grid">
+<% for (const dish of cat.dishes) { %>
+      <article class="dish" data-dish-id="<%= dish.id %>">
+        <div class="dish__media">
+<%~ include('./partials/photo', { image: dish.image, alt: dish.name, sizes: '(min-width: 600px) 320px, 50vw' }) %>
+        </div>
+        <div class="dish__body">
+          <h3 class="dish__name"><%= dish.name %></h3>
+          <p class="dish__desc"><%= dish.desc %></p>
+          <div class="dish__foot">
+            <span class="dish__amount"><%= dish.amount %></span>
+            <span class="dish__price"><%= dish.price %> <span class="dish__cur"><%= ui.cur %></span></span>
+          </div>
+        </div>
+      </article>
+<% } %>
+    </div>
+  </section>
+<% } %>
+</div>
+
+<dialog class="sheet" aria-labelledby="sheet-title">
+  <div class="sheet__handle" aria-hidden="true"></div>
+  <button class="sheet__close" type="button" aria-label="<%= ui.close %>">
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+  </button>
+  <div class="sheet__body">
+    <div class="sheet__media">
+      <img class="sheet__img photo" sizes="100vw" alt="" hidden>
+      <div class="ph" aria-hidden="true" hidden>YAQIN</div>
+    </div>
+    <div class="sheet__info">
+      <h3 class="sheet__name" id="sheet-title"></h3>
+      <p class="sheet__desc"></p>
+      <div class="sheet__foot">
+        <span class="sheet__amount"></span>
+        <span class="sheet__price"></span>
+      </div>
+    </div>
+  </div>
+</dialog>
+<script src="/static/js/menu.js?v=<%= it.assetVersion %>" defer></script>

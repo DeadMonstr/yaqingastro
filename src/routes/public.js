@@ -43,13 +43,16 @@ function localizeMenu(menu, lang, ui) {
   }))
 }
 
+// Язык из cookie, если он известен, иначе русский.
+const savedLang = request => (isLang(request.cookies.lang) ? request.cookies.lang : DEFAULT_LANG)
+
 export default async function publicRoutes(app) {
   const { publicUrl } = app.config
 
-  app.get('/', async (request, reply) => {
-    const saved = request.cookies.lang
-    return reply.redirect(`/${isLang(saved) ? saved : DEFAULT_LANG}`, 302)
-  })
+  app.get('/', async (request, reply) => reply.redirect(`/${savedLang(request)}`, 302))
+
+  // Адрес без языка для QR-кода на столах.
+  app.get('/menu', async (request, reply) => reply.redirect(`/${savedLang(request)}/menu`, 302))
 
   app.get('/robots.txt', async (request, reply) => {
     reply.type('text/plain; charset=utf-8')

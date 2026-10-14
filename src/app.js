@@ -56,7 +56,8 @@ function renderError(app, request, reply, code, titleKey, textKey) {
 }
 
 export async function buildApp(config) {
-  const app = Fastify({ logger: config.logger, trustProxy: config.trustProxy })
+  // «/ru/» и «/ru/menu/» открывают те же страницы, что и адреса без слэша.
+  const app = Fastify({ logger: config.logger, trustProxy: config.trustProxy, routerOptions: { ignoreTrailingSlash: true } })
 
   const db = openDb(config.dbFile)
   app.addHook('onClose', async () => { db.close() })

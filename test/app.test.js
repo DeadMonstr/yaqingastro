@@ -21,6 +21,21 @@ test('GET / follows the lang cookie and ignores unknown values', async t => {
   assert.equal((await a.inject({ url: '/', cookies: { lang: 'de' } })).headers.location, '/ru')
 })
 
+test('GET /menu sends to the menu in the saved language', async t => {
+  const a = await app(t)
+  for (const [cookies, location] of [[{}, '/ru/menu'], [{ lang: 'en' }, '/en/menu'], [{ lang: 'uz' }, '/uz/menu'], [{ lang: 'de' }, '/ru/menu']]) {
+    const r = await a.inject({ url: '/menu', cookies })
+    assert.equal(r.statusCode, 302)
+    assert.equal(r.headers.location, location)
+  }
+})
+
+test('a trailing slash opens the same page', async t => {
+  const a = await app(t)
+  for (const url of ['/ru/', '/ru/menu/', '/en/menu/']) assert.equal((await a.inject(url)).statusCode, 200, url)
+  assert.equal((await a.inject('/de/')).statusCode, 404)
+})
+
 test('unknown pages render the 404 page in the right language', async t => {
   const a = await app(t)
   let r = await a.inject('/en/nope')

@@ -5,6 +5,7 @@ import accountRoutes from './account.js'
 import menuRoutes from './menu.js'
 import categoryRoutes from './categories.js'
 import dishRoutes from './dishes.js'
+import homeRoutes from './home.js'
 
 const TOO_MANY_ATTEMPTS = 'Слишком много попыток. Подождите минуту.'
 const INVALID_DATA = 'Неверные данные'
@@ -99,5 +100,6 @@ export default async function adminRoutes(app) {
   await app.register(menuRoutes)
   await app.register(categoryRoutes)
   await app.register(dishRoutes)
+  await app.register(homeRoutes)
   await app.register(accountRoutes)
 }

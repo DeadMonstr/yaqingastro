@@ -1,4 +1,4 @@
-<div class="lang-tabs" data-lang-tabs role="group" aria-label="Язык названий и описаний">
+<div class="lang-tabs" data-lang-tabs role="group" aria-label="<%= it.langLabel ?? 'Язык названий и описаний' %>">
 <% for (const lang of ['ru', 'uz', 'en']) { %>
   <button class="lang-tabs__btn" type="button" data-lang="<%= lang %>" aria-pressed="<%= lang === 'ru' %>"><%= lang.toUpperCase() %></button>
 <% } %>

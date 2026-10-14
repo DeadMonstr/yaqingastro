@@ -1,0 +1,91 @@
+<% layout('./layout') %>
+<h1 class="page-title">Главная</h1>
+<p class="muted">Тексты и фото главной страницы сайта. Каждая группа сохраняется своей кнопкой «Сохранить».</p>
+
+<div class="group-list">
+<% for (const group of it.groups) { %>
+  <details class="group" id="group-<%= group.id %>"<% if (group.open) { %> open<% } %>>
+    <summary class="group__head">
+      <span class="group__title"><%= group.title %></span>
+    </summary>
+    <form class="group__form" method="post" action="/admin/home/<%= group.id %>" enctype="multipart/form-data">
+      <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+<% if (group.invalid) { %>
+      <p class="alert" role="alert">Группа не сохранена. Исправьте ошибки в полях ниже.</p>
+<% } %>
+<% if (group.hasTabs) { %>
+<%~ include('./partials/lang-tabs', { langLabel: 'Язык текстов' }) %>
+<% } %>
+<% for (const field of group.fields) { %>
+<%   if (field.type === 'image') { %>
+      <div class="field field--photo">
+        <span class="field__label"><%= field.label %></span>
+        <div class="photo-current">
+<%     if (field.image.src) { %>
+          <img class="photo-img" src="<%= field.image.src %>" alt="Текущее фото: <%= field.label %>" width="160" height="160" loading="lazy" decoding="async">
+<%     } else { %>
+          <div class="photo-img photo-img--empty"><span class="ph" aria-hidden="true">Y</span></div>
+<%     } %>
+<%     if (field.image.custom) { %>
+          <label class="check">
+            <input class="check__box" type="checkbox" name="<%= field.key %>.reset" value="on"<% if (field.reset) { %> checked<% } %>>
+            <span>Вернуть по умолчанию</span>
+          </label>
+<%     } else { %>
+          <p class="field__hint"><%= field.image.src ? 'Сейчас на сайте фото по умолчанию' : 'Фото не выбрано' %></p>
+<%     } %>
+        </div>
+        <img class="photo-img preview" alt="Выбранное фото: <%= field.label %>" width="160" height="160" hidden>
+        <input class="file-input" id="<%= field.key %>" name="<%= field.key %>" type="file" accept="image/*" data-image-input<% if (field.error) { %> aria-invalid="true" aria-describedby="<%= field.key %>-error"<% } %>>
+        <label class="btn btn--outline" for="<%= field.key %>"><%= field.image.src ? 'Заменить' : 'Выбрать фото' %></label>
+<%     if (field.error) { %>
+        <p class="field-error" id="<%= field.key %>-error"><%= field.error %></p>
+<%     } %>
+<%     if (field.retry) { %>
+        <p class="field__hint">Выберите фото заново</p>
+<%     } %>
+      </div>
+<%   } else if (field.translatable) { %>
+<%     for (const lang of ['ru', 'uz', 'en']) {
+         const name = `${field.key}.${lang}`
+         const own = field.errorLang === lang
+%>
+      <div class="field" data-lang="<%= lang %>">
+        <label class="field__label" for="<%= name %>"><%= field.label %> (<%= lang.toUpperCase() %>)</label>
+<%       if (field.type === 'textarea') { %>
+        <textarea class="field__input field__input--area" id="<%= name %>" name="<%= name %>" rows="4"<% if (lang === 'ru') { %> aria-required="true"<% } %><% if (own) { %> aria-invalid="true" aria-describedby="<%= name %>-error"<% } %>><%= field.values[lang] %></textarea>
+<%       } else { %>
+        <input class="field__input" id="<%= name %>" name="<%= name %>" type="text" value="<%= field.values[lang] %>" autocomplete="off"<% if (lang === 'ru') { %> aria-required="true"<% } %><% if (own) { %> aria-invalid="true" aria-describedby="<%= name %>-error"<% } %>>
+<%       } %>
+<%       if (own) { %>
+        <p class="field-error" id="<%= name %>-error"><%= field.error %></p>
+<%       } else { %>
+        <p class="field__hint"><%= lang === 'ru' ? 'Обязательно' : 'Если оставить пустым, на сайте будет русский текст' %></p>
+<%       } %>
+      </div>
+<%     } %>
+<%   } else { %>
+      <div class="field">
+        <label class="field__label" for="<%= field.key %>"><%= field.label %></label>
+<%     if (field.type === 'phone') { %>
+        <input class="field__input" id="<%= field.key %>" name="<%= field.key %>" type="tel" value="<%= field.value %>" autocomplete="off"<% if (field.error) { %> aria-invalid="true" aria-describedby="<%= field.key %>-error"<% } %>>
+<%     } else if (field.type === 'username') { %>
+        <input class="field__input" id="<%= field.key %>" name="<%= field.key %>" type="text" value="<%= field.value %>" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"<% if (field.error) { %> aria-invalid="true" aria-describedby="<%= field.key %>-error"<% } %>>
+<%     } else { %>
+        <input class="field__input" id="<%= field.key %>" name="<%= field.key %>" type="text" value="<%= field.value %>" autocomplete="off"<% if (field.error) { %> aria-invalid="true" aria-describedby="<%= field.key %>-error"<% } %>>
+<%     } %>
+<%     if (field.error) { %>
+        <p class="field-error" id="<%= field.key %>-error"><%= field.error %></p>
+<%     } else if (field.type === 'username') { %>
+        <p class="field__hint">Имя или ссылка: на сайте сохранится только имя</p>
+<%     } %>
+      </div>
+<%   } %>
+<% } %>
+      <div class="form-actions">
+        <button class="btn btn--primary btn--block" type="submit">Сохранить</button>
+      </div>
+    </form>
+  </details>
+<% } %>
+</div>

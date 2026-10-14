@@ -24,7 +24,11 @@ test('menu hides hidden dishes and categories without visible dishes', async t =
   setDishVisible(a.db, 1, false)
   setCategoryVisible(a.db, 2, false)
   for (const id of [21, 22, 23, 24]) setDishVisible(a.db, id, false)
-  const body = (await a.inject('/ru/menu')).body
+  const r = await a.inject('/ru/menu')
+  assert.equal(r.statusCode, 200)
+  const body = r.body
+  assert.match(body, /id="cat-breakfast"/)
+  assert.match(body, /Сырники со сметаной/)
   assert.doesNotMatch(body, /Английский завтрак/)
   assert.doesNotMatch(body, /cat-drinks/)
   assert.doesNotMatch(body, /cat-soups/)
@@ -58,7 +62,10 @@ test('dish photos use srcset, missing photos use the placeholder', async t => {
 test('dish names are escaped', async t => {
   const a = await app(t)
   newDish(a.db, { name_ru: '<img src=x onerror=alert(1)>' })
-  assert.doesNotMatch((await a.inject('/ru/menu')).body, /<img src=x/)
+  const r = await a.inject('/ru/menu')
+  assert.equal(r.statusCode, 200)
+  assert.match(r.body, /&lt;img src=x onerror=alert\(1\)&gt;/)
+  assert.doesNotMatch(r.body, /<img src=x/)
 })
 
 test('menu remembers the language in a cookie and rejects unknown languages', async t => {

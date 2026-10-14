@@ -59,6 +59,29 @@ test('validateGroupInput checks phone and normalizes usernames', () => {
   assert.equal(res.errors['contacts.telegram'], 'Только латиница, цифры, точка и _')
 })
 
+test('usernames are taken from profile links and @handles', () => {
+  const cases = {
+    'https://www.instagram.com/yaqin.gastro?igsh=MXZ0bGx2': 'yaqin.gastro',
+    'instagram.com/yaqin.gastro': 'yaqin.gastro',
+    'https://www.instagram.com/yaqin.gastro/?hl=ru': 'yaqin.gastro',
+    'www.instagram.com/yaqin.gastro/?hl=ru': 'yaqin.gastro',
+    't.me/yaqin_gastro': 'yaqin_gastro',
+    'https://t.me/yaqin_gastro/': 'yaqin_gastro',
+    'HTTP://T.ME/yaqin_gastro': 'yaqin_gastro',
+    '@yaqin_gastro': 'yaqin_gastro',
+    ' yaqin.gastro ': 'yaqin.gastro'
+  }
+  for (const [input, expected] of Object.entries(cases)) {
+    const res = validateGroupInput(getGroup('contacts'), groupBody('contacts', { 'contacts.instagram': input }))
+    assert.equal(res.errors['contacts.instagram'], undefined, input)
+    assert.equal(res.values['contacts.instagram'], expected, input)
+  }
+  for (const input of ['https://www.instagram.com/', 'instagram.com/a b']) {
+    const res = validateGroupInput(getGroup('contacts'), groupBody('contacts', { 'contacts.instagram': input }))
+    assert.equal(res.errors['contacts.instagram'], 'Только латиница, цифры, точка и _', input)
+  }
+})
+
 test('content repo round-trips JSON values', () => {
   const db = openDb(':memory:'); migrate(db)
   saveContent(db, { 'hero.tagline': { ru: 'A', uz: 'B', en: 'C' }, 'contacts.phone': '+998' })

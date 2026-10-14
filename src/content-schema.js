@@ -204,12 +204,26 @@ function validateTranslatable(field, body) {
   return { value }
 }
 
+const SCHEME_RE = /^https?:\/\//i
+// Ссылка — это адрес со схемой или «домен/имя…»; одиночный слэш в конце («@name/») ссылкой не считается.
+const LINK_RE = /^[^/]+\/+[^/?#]/
+
+// Имя из ссылки на профиль или из «@name»: «https://www.instagram.com/name?igsh=…», «t.me/name/», «@name» → «name».
+function usernameOf(value) {
+  const bare = value.replace(/^@/, '')
+  if (!SCHEME_RE.test(bare) && !LINK_RE.test(bare)) return bare.replace(/\/+$/, '')
+  try {
+    const url = new URL(SCHEME_RE.test(bare) ? bare : `https://${bare}`)
+    return url.pathname.split('/').find(Boolean) ?? ''
+  } catch {
+    return value
+  }
+}
+
 function validateSingle(field, body) {
   let value = asText(body[field.key])
 
-  if (field.type === 'username') {
-    value = value.replace(/^https?:\/\/[^/]+\//i, '').replace(/^@/, '').replace(/\/$/, '')
-  }
+  if (field.type === 'username') value = usernameOf(value)
 
   if (tooLong(value, field.type)) return { value, error: tooLongError(field.type) }
   if (field.type === 'plain' && value === '') return { value, error: 'Заполните поле' }

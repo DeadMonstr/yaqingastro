@@ -25,7 +25,7 @@ button{font:inherit}
 
 <header style="position:sticky;top:0;z-index:50;background:#0F241A;border-bottom:1px solid rgba(201,169,110,0.18)">
   <div style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,48px);height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px">
-    <a href="Yaqin%20Home.dc.html" style="display:flex;flex-direction:column;align-items:center;line-height:1;text-decoration:none">
+    <a href="home.dc.html" style="display:flex;flex-direction:column;align-items:center;line-height:1;text-decoration:none">
       <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:30px;letter-spacing:0.06em;padding-left:0.06em;color:#E2C99A">YAQIN</span>
       <span style="font-size:8.5px;font-weight:600;letter-spacing:0.44em;padding-left:0.44em;color:#C9A96E;margin-top:4px">GASTRO CAFE</span>
     </a>
@@ -48,7 +48,7 @@ button{font:inherit}
         </sc-for>
       </div>
       <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
-        <a href="Yaqin%20Home.dc.html#order" style="display:inline-flex;align-items:center;padding:11px 20px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:14px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.order }}</a>
+        <a href="home.dc.html#order" style="display:inline-flex;align-items:center;padding:11px 20px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:14px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.order }}</a>
       </sc-if>
       <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
         <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1px solid rgba(226,201,154,0.35);border-radius:999px;background:transparent;cursor:pointer">
@@ -64,7 +64,7 @@ button{font:inherit}
       <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
         <a href="{{ n.href }}" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:500;color:#F5EEE2;padding:14px 0;border-bottom:1px solid rgba(201,169,110,0.18);text-decoration:none">{{ n.label }}</a>
       </sc-for>
-      <a href="Yaqin%20Home.dc.html#order" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:600;color:#E2C99A;padding:14px 0;text-decoration:none">{{ t.order }}</a>
+      <a href="home.dc.html#order" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:600;color:#E2C99A;padding:14px 0;text-decoration:none">{{ t.order }}</a>
     </div>
   </sc-if>
 </header>
@@ -162,7 +162,7 @@ button{font:inherit}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;cardStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Photo cards&quot;,&quot;Compact list&quot;],&quot;default&quot;:&quot;Photo cards&quot;,&quot;tsType&quot;:&quot;'Photo cards'|'Compact list'&quot;,&quot;section&quot;:&quot;Menu&quot;}}">
-const HOME = 'Yaqin%20Home.dc.html';
+const HOME = 'home.dc.html';
 const T = {
   ru: { nav: ['Главная', 'О нас', 'Контакты', 'Как добраться'], order: 'Заказать онлайн', title: 'Меню', hours: 'Ежедневно 08:00 – 23:00', note: 'Цены указаны в сумах', cur: 'сум', g: 'г', ml: 'мл' },
   uz: { nav: ['Bosh sahifa', 'Biz haqimizda', 'Aloqa', 'Manzil'], order: 'Onlayn buyurtma', title: 'Menyu', hours: 'Har kuni 08:00 – 23:00', note: 'Narxlar so’mda ko’rsatilgan', cur: 'so’m', g: 'g', ml: 'ml' },

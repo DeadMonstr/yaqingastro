@@ -49,7 +49,7 @@ button{font:inherit}
         </sc-for>
       </div>
       <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
-        <a href="Yaqin%20Menu.dc.html" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:14px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.nav.menu }}</a>
+        <a href="menu.dc.html" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:14px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.nav.menu }}</a>
       </sc-if>
       <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
         <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1px solid rgba(226,201,154,0.35);border-radius:999px;background:transparent;cursor:pointer">
@@ -62,7 +62,7 @@ button{font:inherit}
   </div>
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
     <div style="border-top:1px solid rgba(201,169,110,0.18);padding:12px clamp(20px,4vw,48px) 28px;display:flex;flex-direction:column">
-      <a href="Yaqin%20Menu.dc.html" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:600;color:#E2C99A;padding:14px 0;border-bottom:1px solid rgba(201,169,110,0.18);text-decoration:none">{{ t.nav.menu }}</a>
+      <a href="menu.dc.html" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:600;color:#E2C99A;padding:14px 0;border-bottom:1px solid rgba(201,169,110,0.18);text-decoration:none">{{ t.nav.menu }}</a>
       <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
         <a href="{{ n.href }}" onClick="{{ n.onClick }}" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:500;color:#F5EEE2;padding:14px 0;border-bottom:1px solid rgba(201,169,110,0.18);text-decoration:none">{{ n.label }}</a>
       </sc-for>
@@ -84,7 +84,7 @@ button{font:inherit}
       <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(28px,3.2vw,40px);line-height:1.15;color:#F5EEE2;text-wrap:balance">{{ t.tagline }}</p>
       <p style="margin:16px 0 0;max-width:560px;font-size:17px;line-height:1.65;color:#DDD4C3;text-wrap:pretty">{{ t.heroDesc }}</p>
       <div style="margin-top:36px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px;pointer-events:auto">
-        <a href="Yaqin%20Menu.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:17px 30px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.ctaMenu }}<span style="font-size:18px;line-height:1">→</span></a>
+        <a href="menu.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:17px 30px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.ctaMenu }}<span style="font-size:18px;line-height:1">→</span></a>
         <a href="#order" style="display:inline-flex;align-items:center;padding:17px 30px;border-radius:999px;border:1px solid rgba(245,238,226,0.55);color:#F5EEE2;font-size:15px;font-weight:600;text-decoration:none" style-hover="border-color:#E2C99A;color:#E2C99A">{{ t.ctaOrder }}</a>
       </div>
     </div>
@@ -105,7 +105,7 @@ button{font:inherit}
         <h1 style="margin:24px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(52px,6.6vw,96px);line-height:0.98;letter-spacing:-0.01em;color:#F5EEE2;text-wrap:balance">{{ t.tagline }}</h1>
         <p style="margin:28px 0 0;max-width:520px;font-size:18px;line-height:1.65;color:#D6CDBB;text-wrap:pretty">{{ t.heroDesc }}</p>
         <div style="margin-top:40px;display:flex;flex-wrap:wrap;gap:12px">
-          <a href="Yaqin%20Menu.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:17px 30px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.ctaMenu }}<span style="font-size:18px;line-height:1">→</span></a>
+          <a href="menu.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:17px 30px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.ctaMenu }}<span style="font-size:18px;line-height:1">→</span></a>
           <a href="#order" style="display:inline-flex;align-items:center;padding:17px 30px;border-radius:999px;border:1px solid rgba(245,238,226,0.5);color:#F5EEE2;font-size:15px;font-weight:600;text-decoration:none" style-hover="border-color:#E2C99A;color:#E2C99A">{{ t.ctaOrder }}</a>
         </div>
         <div style="margin-top:56px;padding-top:28px;border-top:1px solid rgba(201,169,110,0.25);display:flex;flex-wrap:wrap;gap:24px 56px">
@@ -138,7 +138,7 @@ button{font:inherit}
           <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-style:italic;font-size:clamp(36px,3.8vw,54px);line-height:1.02;color:#163326;text-wrap:balance">{{ t.tagline }}</p>
           <p style="margin:20px 0 0;font-size:17px;line-height:1.65;color:#4E4A42;text-wrap:pretty">{{ t.heroDesc }}</p>
           <div style="margin-top:32px;display:flex;flex-wrap:wrap;gap:12px">
-            <a href="Yaqin%20Menu.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:17px 28px;border-radius:999px;background:#163326;color:#F5EEE2;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#1E4232;color:#F5EEE2">{{ t.ctaMenu }}<span style="font-size:18px;line-height:1">→</span></a>
+            <a href="menu.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:17px 28px;border-radius:999px;background:#163326;color:#F5EEE2;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#1E4232;color:#F5EEE2">{{ t.ctaMenu }}<span style="font-size:18px;line-height:1">→</span></a>
             <a href="#order" style="display:inline-flex;align-items:center;padding:17px 28px;border-radius:999px;border:1px solid #163326;color:#163326;font-size:15px;font-weight:600;text-decoration:none" style-hover="background:#163326;color:#F5EEE2">{{ t.ctaOrder }}</a>
           </div>
         </div>
@@ -247,7 +247,7 @@ button{font:inherit}
       <span style="font-size:9px;font-weight:600;letter-spacing:0.44em;padding-left:0.44em;color:#C9A96E;margin-top:5px">GASTRO CAFE</span>
     </div>
     <nav style="display:flex;flex-wrap:wrap;gap:12px 28px">
-      <a href="Yaqin%20Menu.dc.html" style="font-size:14px;color:#EFE7D8;text-decoration:none" style-hover="color:#E2C99A">{{ t.nav.menu }}</a>
+      <a href="menu.dc.html" style="font-size:14px;color:#EFE7D8;text-decoration:none" style-hover="color:#E2C99A">{{ t.nav.menu }}</a>
       <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
         <a href="{{ n.href }}" style="font-size:14px;color:#EFE7D8;text-decoration:none" style-hover="color:#E2C99A">{{ n.label }}</a>
       </sc-for>

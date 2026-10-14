@@ -2,8 +2,10 @@ import csrfProtection from '@fastify/csrf-protection'
 import { findSessionUser } from '../../repos/sessions.js'
 import authRoutes, { renderLogin } from './auth.js'
 import accountRoutes from './account.js'
+import menuRoutes from './menu.js'
 
 const TOO_MANY_ATTEMPTS = 'Слишком много попыток. Подождите минуту.'
+const INVALID_DATA = 'Неверные данные'
 
 const pathOf = url => url.split('?')[0]
 const isApi = request => pathOf(request.url).startsWith('/admin/api/')
@@ -86,13 +88,12 @@ export default async function adminRoutes(app) {
     if (status === 429 && request.method === 'POST' && pathOf(request.url) === '/admin/login') {
       return renderLogin(reply, { error: TOO_MANY_ATTEMPTS, next: request.query.next }, 429)
     }
-    if (isApi(request)) return reply.code(status).send({ error: apiMessage(status) })
+    if (isApi(request)) return reply.code(status).send({ error: err.validation ? INVALID_DATA : apiMessage(status) })
 
     return reply.admin('error', { title: 'Ошибка', code: status, text: pageMessage(err, status) }, status)
   })
 
-  app.get('/', async (request, reply) => reply.redirect('/admin/account')) // временно, до экрана «Меню»
-
   await app.register(authRoutes)
+  await app.register(menuRoutes)
   await app.register(accountRoutes)
 }

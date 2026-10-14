@@ -56,9 +56,18 @@ function init() {
   })
 }
 
-// Скрипт могут подключить и по другому адресу (с ?v=... и без): тогда модуль загрузится дважды, а запускаться должен один раз.
-const root = document.documentElement
-if (!root.classList.contains('js')) {
-  root.classList.add('js')
-  init()
+// Модули экранов подключаются тем же адресом с ?v=...: иначе браузер возьмёт их из кэша недельной давности.
+// Модуль не импортирует admin.js, а получает postJson и toast в init.
+async function loadFeatures() {
+  if (document.querySelector('.dish-list')) {
+    const menu = await import('./admin-menu.js' + new URL(import.meta.url).search)
+    menu.init({ postJson, toast })
+  }
 }
+
+document.documentElement.classList.add('js')
+init()
+loadFeatures().catch(err => {
+  console.error(err)
+  toast('Страница загрузилась не полностью. Обновите её.', true)
+})

@@ -1,0 +1,54 @@
+<% layout('./layout') %>
+<script src="/static/vendor/sortable.min.js?v=<%= it.assetVersion %>" defer></script>
+<h1 class="page-title">Меню</h1>
+<p class="muted">Меняйте порядок за ручку ≡. Переключатель показывает или прячет блюдо и категорию на сайте.</p>
+
+<% if (it.categories.length === 0) { %>
+<p class="muted">Категорий пока нет. Добавьте первую.</p>
+<% } %>
+<div class="cat-list">
+<% for (const cat of it.categories) { %>
+  <details class="cat<%= cat.visible ? '' : ' is-hidden' %>" data-cat-id="<%= cat.id %>">
+    <summary class="cat__head">
+      <span class="handle" role="img" aria-label="Перетащить">≡</span>
+      <span class="cat__title">
+        <span class="cat__name"><%= cat.name %></span>
+        <span class="cat__count"><%= cat.count %></span>
+      </span>
+      <input class="switch" type="checkbox" role="switch" aria-label="Показывать на сайте: <%= cat.name %>" data-visibility-url="/admin/api/categories/<%= cat.id %>/visibility"<% if (cat.visible) { %> checked<% } %>>
+      <a class="icon-link" href="/admin/categories/<%= cat.id %>/edit" aria-label="Правка категории: <%= cat.name %>">✎</a>
+    </summary>
+    <ul class="dish-list" data-category-id="<%= cat.id %>">
+<% for (const dish of cat.dishes) { %>
+      <li class="dish<%= dish.visible ? '' : ' is-hidden' %>" data-id="<%= dish.id %>">
+        <span class="handle" role="img" aria-label="Перетащить">≡</span>
+        <a class="dish__link" href="/admin/dishes/<%= dish.id %>/edit">
+          <span class="thumb">
+<% if (dish.thumb) { %>
+            <img class="thumb__img" src="<%= dish.thumb %>" alt="<%= dish.name %>" width="48" height="48" loading="lazy" decoding="async">
+<% } else { %>
+            <span class="ph" aria-hidden="true">Y</span>
+<% } %>
+          </span>
+          <span class="dish__text">
+            <span class="dish__name"><%= dish.name %></span>
+            <span class="dish__price"><%= dish.price %> сум</span>
+          </span>
+        </a>
+        <input class="switch" type="checkbox" role="switch" aria-label="Показывать на сайте: <%= dish.name %>" data-visibility-url="/admin/api/dishes/<%= dish.id %>/visibility"<% if (dish.visible) { %> checked<% } %>>
+      </li>
+<% } %>
+    </ul>
+<% if (cat.dishes.length === 0) { %>
+    <p class="cat__empty">Блюд пока нет</p>
+<% } %>
+    <div class="cat__foot">
+      <a class="btn btn--outline btn--block" href="/admin/dishes/new?category=<%= cat.id %>">+ Блюдо</a>
+    </div>
+  </details>
+<% } %>
+</div>
+
+<div class="menu-actions">
+  <a class="btn btn--primary btn--block" href="/admin/categories/new">+ Категория</a>
+</div>

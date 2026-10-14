@@ -103,7 +103,7 @@ test('a logged-in visitor is sent from the login page to the admin', async t => 
   const r = await a.inject({ url: '/admin/login', headers: { cookie } })
   assert.equal(r.statusCode, 302)
   assert.equal(r.headers.location, '/admin')
-  assert.equal((await a.inject({ url: '/admin', headers: { cookie } })).headers.location, '/admin/account')
+  assert.equal((await a.inject({ url: '/admin', headers: { cookie } })).statusCode, 200)
 })
 
 test('the login form keeps a safe next and drops a foreign one', async t => {

@@ -29,6 +29,7 @@
   --text-hero-desc: #DDD4C3;
   --text-soft-on-dark: #D6CDBB;
   --ink-on-gold: #22261C;
+  --focus-on-light: var(--green-900);
 
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Manrope', system-ui, sans-serif;
@@ -510,6 +511,10 @@ a.lang-switch__item:hover { color: var(--gold-light); }
   text-wrap: pretty;
 }
 .order__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Золотой фокус из :focus-visible теряется на золотом и светлом фоне. */
+.order :focus-visible,
+.contact :focus-visible { outline-color: var(--focus-on-light); }
 
 /* ---------- Контакты ---------- */
 .contact { background: var(--cream); color: var(--ink); }

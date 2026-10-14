@@ -37,6 +37,23 @@ ADMIN_LOGIN=admin ADMIN_PASSWORD='пароль-не-короче-8' npm run dev
 
 Сайт откроется на <http://localhost:3000>, кабинет — на <http://localhost:3000/admin>. База и фото лежат в `./data`. Тесты: `npm test`.
 
+## Демо на GitHub Pages
+
+GitHub Pages отдаёт только статичные файлы, поэтому там лежит копия публичных страниц
+(UZ / RU / EN, главная и меню) без кабинета. Тексты и меню в ней — значения по умолчанию
+из кода: правки в кабинете туда не попадают. Поисковикам демо закрыто (`noindex`).
+
+Копию собирает `.github/workflows/pages.yml` при каждом push в `main`. В настройках
+репозитория Pages → Source должен стоять «GitHub Actions».
+
+Собрать копию у себя:
+
+```bash
+PUBLIC_URL=https://<пользователь>.github.io/<репозиторий> npm run build:static
+```
+
+Готовые файлы окажутся в `dist/`.
+
 ## Запуск на VPS (Docker)
 
 Нужны Docker и Docker Compose.

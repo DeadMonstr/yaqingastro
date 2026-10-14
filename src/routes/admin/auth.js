@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto'
+import { errorCodes } from 'fastify'
 import { SESSION_TTL_MS, hashPassword, verifyPassword } from '../../services/auth.js'
 import { findUserByLogin } from '../../repos/users.js'
 import { createSession, deleteExpiredSessions, deleteSession } from '../../repos/sessions.js'
@@ -11,6 +12,14 @@ const DUMMY_HASH = await hashPassword(randomBytes(16).toString('hex'))
 
 // Только путь внутри кабинета: /admin, /admin/..., /admin?...; без пробелов, управляющих и не-ASCII символов.
 const ADMIN_PATH = /^\/admin(?:[/?][\x21-\x7e]{0,2000})?$/
+
+// Вход доступен без сессии, поэтому принимает только обычную форму: файлы и другие форматы отклоняются до чтения тела.
+const FORM_TYPE = /^application\/x-www-form-urlencoded\s*(?:;|$)/i
+
+async function formOnly(request) {
+  const type = request.headers['content-type'] ?? ''
+  if (!FORM_TYPE.test(type)) throw new errorCodes.FST_ERR_CTP_INVALID_MEDIA_TYPE(type)
+}
 
 export function safeNext(next) {
   return typeof next === 'string' && ADMIN_PATH.test(next) ? next : '/admin'
@@ -27,7 +36,8 @@ export default async function authRoutes(app) {
   })
 
   app.post('/login', {
-    config: { public: true, rateLimit: { max: 5, timeWindow: 60000 } }
+    config: { public: true, rateLimit: { max: 5, timeWindow: 60000 } },
+    onRequest: formOnly
   }, async (request, reply) => {
     const body = request.body ?? {}
     const login = typeof body.login === 'string' ? body.login.trim() : ''

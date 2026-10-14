@@ -1,4 +1,5 @@
 import csrfProtection from '@fastify/csrf-protection'
+import multipart from '@fastify/multipart'
 import { findSessionUser } from '../../repos/sessions.js'
 import authRoutes, { renderLogin } from './auth.js'
 import accountRoutes from './account.js'
@@ -7,6 +8,7 @@ import categoryRoutes from './categories.js'
 import dishRoutes from './dishes.js'
 import homeRoutes from './home.js'
 
+const MB = 1024 * 1024
 const TOO_MANY_ATTEMPTS = 'Слишком много попыток. Подождите минуту.'
 const INVALID_DATA = 'Неверные данные'
 
@@ -57,6 +59,13 @@ export default async function adminRoutes(app) {
     if (user || request.routeOptions.config?.public) return
     if (isApi(request)) return reply.code(401).send({ error: 'Войдите заново' })
     return reply.redirect(request.method === 'GET' ? `/admin/login?next=${encodeURIComponent(request.url)}` : '/admin/login')
+  })
+
+  // Файлы принимаются только здесь, и разбор тела идёт после проверки сессии выше: запрос без входа
+  // получает перенаправление или 401, не прочитав ни байта. Открытая страница входа файлов не принимает (auth.js).
+  await app.register(multipart, {
+    attachFieldsToBody: 'keyValues',
+    limits: { fileSize: 15 * MB, files: 4 }
   })
 
   app.addHook('preHandler', (request, reply, done) => {

@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { makeApp, testConfig } from './helpers/app.js'
+import { multipart } from './helpers/admin.js'
 import { buildApp } from '../src/app.js'
 
 const app = async (t, o) => { const a = await makeApp(o); t.after(() => a.close()); return a }
@@ -46,6 +47,16 @@ test('unexpected errors render the 500 page without details', async t => {
   assert.equal(r.statusCode, 500)
   assert.match(r.body, /Nimadir xato ketdi/)
   assert.doesNotMatch(r.body, /secret detail/)
+})
+
+test('public pages turn away uploads without reading them', async t => {
+  const a = await app(t)
+  const upload = multipart({ photo: { filename: 'a.jpg', type: 'image/jpeg', content: Buffer.alloc(16 * 1024 * 1024, 65) } })
+  for (const url of ['/ru', '/ru/nope', '/static/x']) {
+    const r = await a.inject({ method: 'POST', url, ...upload })
+    assert.notEqual(r.statusCode, 413, url)
+    assert.ok([404, 415].includes(r.statusCode), `${url}: ${r.statusCode}`)
+  }
 })
 
 test('robots.txt hides /admin and points to the sitemap', async t => {

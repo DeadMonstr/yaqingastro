@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { makeApp } from './helpers/app.js'
-import { loginAs, form, getCsrf } from './helpers/admin.js'
+import { loginAs, form, getCsrf, multipart } from './helpers/admin.js'
 import { safeNext } from '../src/routes/admin/auth.js'
 
 const app = async t => { const a = await makeApp(); t.after(() => a.close()); return a }
@@ -15,6 +15,31 @@ test('admin pages redirect to login without a session', async t => {
   const r = await (await app(t)).inject('/admin/account')
   assert.equal(r.statusCode, 302)
   assert.equal(r.headers.location, '/admin/login?next=%2Fadmin%2Faccount')
+})
+
+const bigUpload = fields => multipart({ ...fields, photo: { filename: 'a.jpg', type: 'image/jpeg', content: Buffer.alloc(16 * 1024 * 1024, 65) } })
+
+test('the login form does not read uploads or other formats', async t => {
+  const a = await app(t)
+  const p = await loginPage(a)
+  const upload = bigUpload({ _csrf: p.csrf, login: 'admin', password: 'secret-pass-1' })
+  let r = await a.inject({ method: 'POST', url: '/admin/login', headers: { cookie: p.cookie, ...upload.headers }, payload: upload.payload })
+  assert.notEqual(r.statusCode, 413)
+  assert.equal(r.statusCode, 415)
+  assert.equal(r.cookies.find(c => c.name === 'sid'), undefined)
+  r = await a.inject({ method: 'POST', url: '/admin/login', headers: { cookie: p.cookie, 'content-type': 'application/json' }, payload: JSON.stringify({ _csrf: p.csrf, login: 'admin', password: 'secret-pass-1' }) })
+  assert.equal(r.statusCode, 415)
+  assert.equal(r.cookies.find(c => c.name === 'sid'), undefined)
+})
+
+test('admin pages turn away anonymous uploads before reading them', async t => {
+  const a = await app(t)
+  const upload = bigUpload({ name_ru: 'Плов', price: '1000' })
+  const page = await a.inject({ method: 'POST', url: '/admin/dishes', ...upload })
+  assert.equal(page.statusCode, 302)
+  assert.equal(page.headers.location, '/admin/login')
+  const api = await a.inject({ method: 'POST', url: '/admin/api/categories/order', ...upload })
+  assert.equal(api.statusCode, 401)
 })
 
 test('wrong password shows an error', async t => {
@@ -124,8 +149,11 @@ test('an unknown login gets the same answer as a wrong password', async t => {
 test('login ignores fields that are not strings', async t => {
   const a = await app(t)
   const p = await loginPage(a)
-  const r = await a.inject({ method: 'POST', url: '/admin/login', headers: { cookie: p.cookie, 'content-type': 'application/json' }, payload: JSON.stringify({ _csrf: p.csrf, login: { a: 1 }, password: ['x'], next: 5 }) })
+  // Повтор поля в форме даёт массив вместо строки.
+  const payload = `_csrf=${encodeURIComponent(p.csrf)}&login=admin&login=admin&password=secret-pass-1&password=secret-pass-1&next=/admin&next=/admin`
+  const r = await a.inject({ method: 'POST', url: '/admin/login', headers: { cookie: p.cookie, ...form({}).headers }, payload })
   assert.equal(r.statusCode, 401)
+  assert.equal(r.cookies.find(c => c.name === 'sid'), undefined)
 })
 
 test('a tampered session cookie is not accepted', async t => {

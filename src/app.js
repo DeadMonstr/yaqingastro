@@ -3,7 +3,6 @@ import Fastify from 'fastify'
 import helmet from '@fastify/helmet'
 import cookie from '@fastify/cookie'
 import formbody from '@fastify/formbody'
-import multipart from '@fastify/multipart'
 import rateLimit from '@fastify/rate-limit'
 import view from '@fastify/view'
 import fastifyStatic from '@fastify/static'
@@ -21,8 +20,6 @@ import adminRoutes from './routes/admin/index.js'
 const ROOT = path.join(import.meta.dirname, '..')
 const VIEWS_DIR = path.join(import.meta.dirname, 'views')
 const PUBLIC_DIR = path.join(ROOT, 'public')
-
-const MB = 1024 * 1024
 
 const CSP_DIRECTIVES = {
   'default-src': ["'self'"],
@@ -75,10 +72,6 @@ export async function buildApp(config) {
   await app.register(helmet, { contentSecurityPolicy: { useDefaults: false, directives: CSP_DIRECTIVES } })
   await app.register(cookie, { secret: config.sessionSecret })
   await app.register(formbody)
-  await app.register(multipart, {
-    attachFieldsToBody: 'keyValues',
-    limits: { fileSize: 15 * MB, files: 4 }
-  })
   await app.register(rateLimit, { global: false })
   // Меняется при каждом запуске: адреса CSS и JS получают ?v=..., и посетители не держат старые файлы 7 дней.
   const assetVersion = Date.now().toString(36)

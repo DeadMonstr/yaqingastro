@@ -14,8 +14,8 @@ const WEBP_QUALITY = 80
 const SAFE_ID = /^[A-Za-z]+-[A-Za-z0-9-]+$/
 
 export class ImageError extends Error {
-  constructor() {
-    super('Не удалось прочитать фото, сохраните его как JPEG или PNG')
+  constructor(options) {
+    super('Не удалось прочитать фото, сохраните его как JPEG или PNG', options)
     this.name = 'ImageError'
   }
 }
@@ -57,8 +57,10 @@ export function createImageStore({ dir, log }) {
             .toBuffer()
         )
       )
-    } catch {
-      throw new ImageError()
+    } catch (err) {
+      // Владельцу — понятный текст; в журнал — причина: битый файл, нехватка памяти или сбой libvips.
+      log.warn({ err, kind }, 'could not process image')
+      throw new ImageError({ cause: err })
     }
 
     const id = `${kind}-${randomUUID()}`

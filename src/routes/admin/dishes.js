@@ -24,12 +24,14 @@ const fromRow = dish => ({
 })
 
 const fromBody = body => ({ ...rawValues(body, TEXT_FIELDS), is_visible: body?.is_visible === 'on' })
+const hasFile = value => Buffer.isBuffer(value) && value.length > 0
 
 export default async function dishRoutes(app) {
   const { db, images } = app
 
   // dish — правимое блюдо или null для нового; values — строки, как их показывает форма.
-  function renderForm(reply, dish, values, { errors = {}, removePhoto = false, status = 200 } = {}) {
+  // retryPhoto — файл был выбран, но не сохранился: браузер не покажет его в форме снова.
+  function renderForm(reply, dish, values, { errors = {}, removePhoto = false, retryPhoto = false, status = 200 } = {}) {
     return reply.admin('dish-form', {
       ...PAGE,
       title: dish ? 'Правка блюда' : 'Новое блюдо',
@@ -38,7 +40,7 @@ export default async function dishRoutes(app) {
       values,
       errors,
       removePhoto,
-      retryPhoto: Object.keys(errors).length > 0
+      retryPhoto
     }, status)
   }
 
@@ -46,13 +48,13 @@ export default async function dishRoutes(app) {
   async function save(request, reply, dish) {
     const body = request.body ?? {}
     const removePhoto = body.remove_photo === 'on'
-    const fail = errors => renderForm(reply, dish, fromBody(body), { errors, removePhoto, status: 400 })
+    const fail = errors => renderForm(reply, dish, fromBody(body), { errors, removePhoto, retryPhoto: hasFile(body.photo), status: 400 })
 
     const { values, errors } = parseDishForm(body, listCategories(db).map(category => category.id))
     if (Object.keys(errors).length) return fail(errors)
 
     let newImage = null
-    if (Buffer.isBuffer(body.photo) && body.photo.length > 0) {
+    if (hasFile(body.photo)) {
       try {
         newImage = await images.save('dish', body.photo)
       } catch (err) {

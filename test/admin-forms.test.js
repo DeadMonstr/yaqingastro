@@ -146,13 +146,23 @@ test('a saved photo shows as a thumbnail with a remove checkbox', async t => {
 
 test('an error re-render keeps raw strings, the chosen category and asks to pick the photo again', async t => {
   const s = await setup(t)
-  const r = await postMultipart(s, '/admin/dishes', dishFields({ category_id: '2', name_ru: '', price: '95 000', amount: '12', unit: 'ml' }))
+  const r = await postMultipart(s, '/admin/dishes', dishFields({ category_id: '2', name_ru: '', price: '95 000', amount: '12', unit: 'ml', photo: { filename: 'a.jpg', type: 'image/jpeg', content: await jpeg() } }))
   assert.equal(r.statusCode, 400)
   assert.match(r.body, /<option value="2" selected>/)
   assert.match(r.body, /value="95 000"/)
   assert.match(r.body, /<option value="ml" selected>/)
   assert.match(r.body, /Выберите фото заново/)
   assert.match(r.body, /<p class="field-error"[^>]*>Введите название на русском<\/p>/)
+})
+
+test('an error re-render does not ask for a photo that was not chosen', async t => {
+  const s = await setup(t)
+  let r = await postMultipart(s, '/admin/dishes', dishFields({ name_ru: '' }))
+  assert.equal(r.statusCode, 400)
+  assert.doesNotMatch(r.body, /Выберите фото заново/)
+  r = await postMultipart(s, '/admin/dishes', dishFields({ name_ru: '', photo: { filename: '', type: 'application/octet-stream', content: Buffer.alloc(0) } }))
+  assert.equal(r.statusCode, 400)
+  assert.doesNotMatch(r.body, /Выберите фото заново/)
 })
 
 test('a dish in an unknown category is rejected and nothing is stored', async t => {

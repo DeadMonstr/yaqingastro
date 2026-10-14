@@ -46,6 +46,16 @@ test('save rejects non-images and writes nothing', async () => {
   assert.deepEqual(fs.readdirSync(dir), [])
 })
 
+test('a rejected photo keeps the sharp error as the cause and logs it', async () => {
+  const { images, warnings } = store()
+  const err = await images.save('dish', Buffer.from('not an image')).catch(e => e)
+  assert.ok(err instanceof ImageError)
+  assert.equal(err.message, 'Не удалось прочитать фото, сохраните его как JPEG или PNG')
+  assert.ok(err.cause instanceof Error)
+  assert.equal(warnings.length, 1)
+  assert.equal(warnings[0][0].err, err.cause)
+})
+
 test('save rejects images that pass metadata but fail decoding and writes nothing', async () => {
   const { dir, images } = store()
   const full = await jpeg({ width: 1600, height: 1200 })

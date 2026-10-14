@@ -1,0 +1,15 @@
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="logo logo--footer">
+      <span class="logo__word">YAQIN</span>
+      <span class="logo__sub">GASTRO CAFE</span>
+    </div>
+    <nav class="footer-nav">
+      <a class="footer-nav__link" href="/<%= it.lang %>/menu"><%= it.ui.nav.menu %></a>
+<% for (const item of it.nav) { %>
+      <a class="footer-nav__link" href="<%= item.href %>"><%= item.label %></a>
+<% } %>
+    </nav>
+    <div class="site-footer__copy">© <%= it.year %> Yaqin Gastro Cafe</div>
+  </div>
+</footer>

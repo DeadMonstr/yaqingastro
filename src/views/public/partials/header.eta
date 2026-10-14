@@ -1,0 +1,36 @@
+<header class="site-header">
+  <div class="site-header__bar">
+    <a class="logo" href="<%= it.homeHref %>">
+      <span class="logo__word">YAQIN</span>
+      <span class="logo__sub">GASTRO CAFE</span>
+    </a>
+    <nav class="site-nav">
+<% for (const item of it.nav) { %>
+      <a class="site-nav__link" href="<%= item.href %>"><%= item.label %></a>
+<% } %>
+    </nav>
+    <div class="site-header__tools">
+      <div class="lang-switch">
+<% for (const l of it.langLinks) { %>
+<% if (l.active) { %>
+        <span class="lang-switch__item is-active" aria-current="true"><%= l.label %></span>
+<% } else { %>
+        <a class="lang-switch__item" href="<%= l.href %>" hreflang="<%= l.code %>" lang="<%= l.code %>"><%= l.label %></a>
+<% } %>
+<% } %>
+      </div>
+      <a class="btn btn--gold site-cta" href="<%= it.cta.href %>"><%= it.cta.label %></a>
+      <button class="burger" type="button" aria-label="<%= it.ui.nav.menu %>" aria-expanded="false" aria-controls="mobile-nav">
+        <span class="burger__line"></span>
+        <span class="burger__line"></span>
+        <span class="burger__line"></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobile-nav" hidden>
+    <a class="mobile-nav__link mobile-nav__link--cta" href="<%= it.cta.href %>"><%= it.cta.label %></a>
+<% for (const item of it.nav) { %>
+    <a class="mobile-nav__link" href="<%= item.href %>"><%= item.label %></a>
+<% } %>
+  </div>
+</header>

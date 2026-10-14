@@ -100,11 +100,17 @@
   }
 
   // Закрываем через историю: запись #dish-<id> уходит, а popstate закрывает окно.
+  // history.back() срабатывает не сразу: пока popstate не пришёл, повторное закрытие
+  // (двойное нажатие на ✕, ✕ и свайп) не должно уводить со страницы ещё на шаг назад.
+  let leaving = false
   const dismiss = () => {
-    if (sheet.open) history.back()
+    if (!sheet.open || leaving) return
+    leaving = true
+    history.back()
   }
 
   addEventListener('popstate', () => {
+    leaving = false
     if (sheet.open) sheet.close()
   })
   sheet.addEventListener('close', () => {

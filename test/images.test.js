@@ -46,6 +46,16 @@ test('save rejects non-images and writes nothing', async () => {
   assert.deepEqual(fs.readdirSync(dir), [])
 })
 
+test('save rejects images that pass metadata but fail decoding and writes nothing', async () => {
+  const { dir, images } = store()
+  const full = await jpeg({ width: 1600, height: 1200 })
+  const truncated = full.subarray(0, full.length >> 1)
+  await sharp(truncated).metadata()
+  await assert.rejects(sharp(truncated).toBuffer())
+  await assert.rejects(images.save('dish', truncated), ImageError)
+  assert.deepEqual(fs.readdirSync(dir), [])
+})
+
 test('save rejects an unknown kind', async () => {
   const { dir, images } = store()
   await assert.rejects(images.save('logo', await jpeg()), { message: /Unknown image kind/ })

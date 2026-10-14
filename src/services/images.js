@@ -45,26 +45,30 @@ export function createImageStore({ dir, log }) {
   async function save(kind, buffer) {
     if (!Object.hasOwn(IMAGE_WIDTHS, kind)) throw new Error(`Unknown image kind: ${kind}`)
 
+    const widths = IMAGE_WIDTHS[kind]
+    let variants
     try {
-      await sharp(buffer).metadata()
+      variants = await Promise.all(
+        widths.map(width =>
+          sharp(buffer)
+            .rotate()
+            .resize({ width, withoutEnlargement: true })
+            .webp({ quality: WEBP_QUALITY })
+            .toBuffer()
+        )
+      )
     } catch {
       throw new ImageError()
     }
 
     const id = `${kind}-${randomUUID()}`
-    const results = await Promise.allSettled(
-      IMAGE_WIDTHS[kind].map(width =>
-        sharp(buffer)
-          .rotate()
-          .resize({ width, withoutEnlargement: true })
-          .webp({ quality: WEBP_QUALITY })
-          .toFile(fileOf(id, width))
-      )
+    const writes = await Promise.allSettled(
+      variants.map((data, i) => fs.promises.writeFile(fileOf(id, widths[i]), data))
     )
 
-    const failed = results.find(result => result.status === 'rejected')
+    const failed = writes.find(result => result.status === 'rejected')
     if (failed) {
-      await unlinkAll(id, IMAGE_WIDTHS[kind])
+      await unlinkAll(id, widths)
       throw failed.reason
     }
     return id

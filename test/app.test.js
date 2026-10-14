@@ -31,6 +31,13 @@ test('unknown pages render the 404 page in the right language', async t => {
   assert.match(r.body, /<html lang="ru"/)
 })
 
+test('CSS and JS URLs carry a version for cache busting', async t => {
+  const r = await (await app(t)).inject('/ru/nope')
+  assert.match(r.body, /\/static\/css\/site\.css\?v=[0-9a-z]+"/)
+  assert.match(r.body, /\/static\/css\/fonts\.css\?v=[0-9a-z]+"/)
+  assert.match(r.body, /\/static\/js\/site\.js\?v=[0-9a-z]+"/)
+})
+
 test('unexpected errors render the 500 page without details', async t => {
   const a = await makeApp()
   t.after(() => a.close())

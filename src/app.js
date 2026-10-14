@@ -79,7 +79,10 @@ export async function buildApp(config) {
     limits: { fileSize: 15 * MB, files: 4 }
   })
   await app.register(rateLimit, { global: false })
+  // Меняется при каждом запуске: адреса CSS и JS получают ?v=..., и посетители не держат старые файлы 7 дней.
+  const assetVersion = Date.now().toString(36)
   await app.register(view, {
+    defaultContext: { assetVersion },
     engine: { eta: new Eta({ views: VIEWS_DIR, autoEscape: true, cache: config.isProd }) },
     root: VIEWS_DIR,
     viewExt: 'eta'

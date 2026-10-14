@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Manrope:wght@400;500;600;700&amp;display=swap">
+<script src="./image-slot.js"></script>
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#0F241A;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#C9A96E;text-decoration:none}
+a:hover{color:#E2C99A}
+button{font:inherit}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#0F241A;font-family:'Manrope',system-ui,sans-serif;color:#F5EEE2">
+
+<header style="position:sticky;top:0;z-index:50;background:rgba(15,36,26,0.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,169,110,0.18)">
+  <div style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,48px);height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+    <a href="#top" style="display:flex;flex-direction:column;align-items:center;line-height:1;text-decoration:none">
+      <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:30px;letter-spacing:0.06em;padding-left:0.06em;color:#E2C99A">YAQIN</span>
+      <span style="font-size:8.5px;font-weight:600;letter-spacing:0.44em;padding-left:0.44em;color:#C9A96E;margin-top:4px">GASTRO CAFE</span>
+    </a>
+    <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;align-items:center;gap:clamp(20px,2.6vw,36px)">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+          <a href="{{ n.href }}" style="font-size:14px;font-weight:500;letter-spacing:0.02em;color:#EFE7D8;text-decoration:none" style-hover="color:#E2C99A">{{ n.label }}</a>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="display:flex;gap:2px;padding:3px;border:1px solid rgba(226,201,154,0.35);border-radius:999px">
+        <sc-for list="{{ langs }}" as="l" hint-placeholder-count="3">
+          <sc-if value="{{ l.active }}">
+            <button style="border:0;cursor:default;padding:6px 11px;border-radius:999px;background:#F5EEE2;color:#163326;font-size:12px;font-weight:700;letter-spacing:0.06em">{{ l.label }}</button>
+          </sc-if>
+          <sc-if value="{{ l.inactive }}">
+            <button onClick="{{ l.select }}" style="border:0;cursor:pointer;padding:6px 11px;border-radius:999px;background:transparent;color:#EFE7D8;font-size:12px;font-weight:600;letter-spacing:0.06em" style-hover="color:#E2C99A">{{ l.label }}</button>
+          </sc-if>
+        </sc-for>
+      </div>
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <a href="Yaqin%20Menu.dc.html" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:14px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.nav.menu }}</a>
+      </sc-if>
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1px solid rgba(226,201,154,0.35);border-radius:999px;background:transparent;cursor:pointer">
+          <span style="display:block;width:18px;height:1.5px;background:#F5EEE2"></span>
+          <span style="display:block;width:18px;height:1.5px;background:#F5EEE2"></span>
+          <span style="display:block;width:18px;height:1.5px;background:#F5EEE2"></span>
+        </button>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="border-top:1px solid rgba(201,169,110,0.18);padding:12px clamp(20px,4vw,48px) 28px;display:flex;flex-direction:column">
+      <a href="Yaqin%20Menu.dc.html" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:600;color:#E2C99A;padding:14px 0;border-bottom:1px solid rgba(201,169,110,0.18);text-decoration:none">{{ t.nav.menu }}</a>
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+        <a href="{{ n.href }}" onClick="{{ n.onClick }}" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:500;color:#F5EEE2;padding:14px 0;border-bottom:1px solid rgba(201,169,110,0.18);text-decoration:none">{{ n.label }}</a>
+      </sc-for>
+    </div>
+  </sc-if>
+</header>
+
+<sc-if value="{{ heroA }}" hint-placeholder-val="{{ true }}">
+  <section id="top" data-screen-label="Hero 1a" style="position:relative;min-height:max(620px, calc(100vh - 72px));display:flex;flex-direction:column;background:#0F241A;overflow:hidden">
+    <div style="position:absolute;inset:0;color:rgba(226,201,154,0.6)">
+      <image-slot id="hero-a-bg" shape="rect" placeholder="Interior photo (full-bleed)" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+    </div>
+    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, rgba(15,36,26,0.70) 0%, rgba(15,36,26,0.50) 45%, rgba(15,36,26,0.94) 100%)"></div>
+    <div style="position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:72px 24px 48px;pointer-events:none">
+      <div style="font-size:13px;font-weight:600;letter-spacing:0.26em;text-transform:uppercase;color:#E2C99A">{{ t.floor }}</div>
+      <h1 style="margin:22px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(88px,14vw,184px);line-height:0.86;letter-spacing:0.05em;padding-left:0.05em;color:#F1E3C4">YAQIN</h1>
+      <div style="margin-top:14px;font-size:clamp(12px,1.3vw,16px);font-weight:500;letter-spacing:0.52em;padding-left:0.52em;color:#C9A96E">GASTRO CAFE</div>
+      <div style="width:56px;height:1px;background:#C9A96E;margin:36px 0 28px"></div>
+      <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(28px,3.2vw,40px);line-height:1.15;color:#F5EEE2;text-wrap:balance">{{ t.tagline }}</p>
+      <p style="margin:16px 0 0;max-width:560px;font-size:17px;line-height:1.65;color:#DDD4C3;text-wrap:pretty">{{ t.heroDesc }}</p>
+      <div style="margin-top:36px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px;pointer-events:auto">
+        <a href="Yaqin%20Menu.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:17px 30px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.ctaMenu }}<span style="font-size:18px;line-height:1">→</span></a>
+        <a href="#order" style="display:inline-flex;align-items:center;padding:17px 30px;border-radius:999px;border:1px solid rgba(245,238,226,0.55);color:#F5EEE2;font-size:15px;font-weight:600;text-decoration:none" style-hover="border-color:#E2C99A;color:#E2C99A">{{ t.ctaOrder }}</a>
+      </div>
+    </div>
+    <div style="position:relative;pointer-events:none;border-top:1px solid rgba(226,201,154,0.22)">
+      <div style="max-width:1280px;margin:0 auto;padding:22px clamp(20px,4vw,48px);display:flex;flex-wrap:wrap;justify-content:center;gap:12px 56px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#C9A96E">{{ t.hoursLabel }}</span><span style="font-size:15px;color:#F5EEE2">{{ t.hours }}</span></div>
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#C9A96E">{{ t.addrLabel }}</span><span style="font-size:15px;color:#F5EEE2">{{ t.addrShort }}</span></div>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ heroB }}" hint-placeholder-val="{{ false }}">
+  <section id="top" data-screen-label="Hero 1b" style="background:#163326;padding:clamp(48px,7vw,104px) clamp(20px,4vw,48px)">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(48px,6vw,96px);align-items:center">
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;font-size:12px;font-weight:600;letter-spacing:0.26em;text-transform:uppercase;color:#C9A96E"><span>Yaqin · Gastro Cafe</span><span style="width:40px;height:1px;background:#C9A96E"></span></div>
+        <h1 style="margin:24px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(52px,6.6vw,96px);line-height:0.98;letter-spacing:-0.01em;color:#F5EEE2;text-wrap:balance">{{ t.tagline }}</h1>
+        <p style="margin:28px 0 0;max-width:520px;font-size:18px;line-height:1.65;color:#D6CDBB;text-wrap:pretty">{{ t.heroDesc }}</p>
+        <div style="margin-top:40px;display:flex;flex-wrap:wrap;gap:12px">
+          <a href="Yaqin%20Menu.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:17px 30px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.ctaMenu }}<span style="font-size:18px;line-height:1">→</span></a>
+          <a href="#order" style="display:inline-flex;align-items:center;padding:17px 30px;border-radius:999px;border:1px solid rgba(245,238,226,0.5);color:#F5EEE2;font-size:15px;font-weight:600;text-decoration:none" style-hover="border-color:#E2C99A;color:#E2C99A">{{ t.ctaOrder }}</a>
+        </div>
+        <div style="margin-top:56px;padding-top:28px;border-top:1px solid rgba(201,169,110,0.25);display:flex;flex-wrap:wrap;gap:24px 56px">
+          <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#C9A96E">{{ t.hoursLabel }}</span><span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:600;color:#F5EEE2">{{ t.hours }}</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#C9A96E">{{ t.addrLabel }}</span><span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:600;color:#F5EEE2">{{ t.addrShort }}</span></div>
+        </div>
+      </div>
+      <div style="position:relative;width:100%;max-width:500px;justify-self:center;aspect-ratio:4/5">
+        <div style="position:absolute;inset:-14px;border:1px solid rgba(201,169,110,0.5);border-radius:50% 50% 30px 30px / 40% 40% 30px 30px;pointer-events:none"></div>
+        <div style="position:absolute;inset:0;border-radius:50% 50% 24px 24px / 40% 40% 24px 24px;overflow:hidden;background:#1E4232;color:#C9A96E">
+          <image-slot id="hero-b-img" shape="rect" placeholder="Signature dish photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        </div>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ heroC }}" hint-placeholder-val="{{ false }}">
+  <section id="top" data-screen-label="Hero 1c" style="background:#F5EEE2;color:#163326;padding:clamp(28px,4vw,48px) clamp(20px,4vw,48px) clamp(56px,7vw,96px)">
+    <div style="max-width:1280px;margin:0 auto">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-bottom:16px;border-bottom:1px solid #D9CCB4;font-size:12px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#7A5A26">
+        <span>{{ t.addrShort }}</span><span>Gastro Cafe</span><span>{{ t.hours }}</span>
+      </div>
+      <h1 style="margin:clamp(16px,2.4vw,32px) 0 clamp(24px,3vw,40px);text-align:center;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(112px,25vw,360px);line-height:0.8;letter-spacing:0.04em;padding-left:0.04em;color:#163326">YAQIN</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:clamp(28px,4vw,56px);align-items:flex-end">
+        <div style="position:relative;flex:1 1 560px;aspect-ratio:16/10;border-radius:24px;overflow:hidden;background:#E6DAC5;color:#7A5A26">
+          <image-slot id="hero-c-img" shape="rect" placeholder="Interior or dish photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        </div>
+        <div style="flex:1 1 320px;padding-bottom:8px">
+          <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-style:italic;font-size:clamp(36px,3.8vw,54px);line-height:1.02;color:#163326;text-wrap:balance">{{ t.tagline }}</p>
+          <p style="margin:20px 0 0;font-size:17px;line-height:1.65;color:#4E4A42;text-wrap:pretty">{{ t.heroDesc }}</p>
+          <div style="margin-top:32px;display:flex;flex-wrap:wrap;gap:12px">
+            <a href="Yaqin%20Menu.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:17px 28px;border-radius:999px;background:#163326;color:#F5EEE2;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#1E4232;color:#F5EEE2">{{ t.ctaMenu }}<span style="font-size:18px;line-height:1">→</span></a>
+            <a href="#order" style="display:inline-flex;align-items:center;padding:17px 28px;border-radius:999px;border:1px solid #163326;color:#163326;font-size:15px;font-weight:600;text-decoration:none" style-hover="background:#163326;color:#F5EEE2">{{ t.ctaOrder }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<section id="about" data-screen-label="About" style="scroll-margin-top:72px;background:#FBF7F0;color:#1C1F1A;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px)">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:clamp(40px,6vw,96px);align-items:center">
+    <div style="position:relative;aspect-ratio:4/5;border-radius:24px;overflow:hidden;background:#EDE3D2;color:#7A5A26">
+      <image-slot id="about-img" shape="rect" placeholder="Interior or team photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:#7A5A26">{{ t.aboutEyebrow }}</div>
+      <h2 style="margin:18px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(40px,4.6vw,64px);line-height:1.04;color:#163326;text-wrap:balance">{{ t.aboutTitle }}</h2>
+      <p style="margin:28px 0 0;font-size:17px;line-height:1.7;color:#4E4A42;text-wrap:pretty">{{ t.aboutP1 }}</p>
+      <p style="margin:16px 0 0;font-size:17px;line-height:1.7;color:#4E4A42;text-wrap:pretty">{{ t.aboutP2 }}</p>
+      <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px">
+        <sc-for list="{{ t.features }}" as="f" hint-placeholder-count="3">
+          <div style="padding-top:16px;border-top:1px solid #D9CCB4">
+            <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:600;line-height:1.15;color:#163326">{{ f.title }}</div>
+            <div style="margin-top:6px;font-size:14px;line-height:1.5;color:#5E5A50">{{ f.text }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" data-screen-label="Gallery" style="scroll-margin-top:72px;background:#163326;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px)">
+  <div style="max-width:1280px;margin:0 auto">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px 48px">
+      <div>
+        <div style="font-size:12px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:#C9A96E">{{ t.galleryEyebrow }}</div>
+        <h2 style="margin:18px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(40px,4.6vw,64px);line-height:1.04;color:#F5EEE2">{{ t.galleryTitle }}</h2>
+      </div>
+      <p style="margin:0;max-width:420px;font-size:16px;line-height:1.65;color:#D6CDBB;text-wrap:pretty">{{ t.galleryDesc }}</p>
+    </div>
+    <div style="margin-top:48px;display:grid;grid-template-columns:{{ galCols }};grid-auto-rows:{{ galRow }};gap:14px">
+      <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="4">
+        <div style="position:relative;border-radius:20px;overflow:hidden;background:#1E4232;color:#C9A96E;grid-column:{{ g.col }};grid-row:{{ g.row }}">
+          <image-slot id="{{ g.id }}" shape="rect" placeholder="{{ g.ph }}" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="order" data-screen-label="Order CTA" style="scroll-margin-top:72px;background:#C9A96E;color:#10261B;padding:clamp(56px,7vw,96px) clamp(20px,4vw,48px)">
+  <div style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:32px 64px">
+    <div style="flex:1 1 480px;max-width:680px">
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.24em;text-transform:uppercase;color:#10261B">{{ t.orderEyebrow }}</div>
+      <h2 style="margin:16px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(36px,4.4vw,60px);line-height:1.04;color:#10261B;text-wrap:balance">{{ t.orderTitle }}</h2>
+      <p style="margin:18px 0 0;font-size:17px;line-height:1.65;color:#22261C;text-wrap:pretty">{{ t.orderDesc }}</p>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px">
+      <a href="https://t.me/yaqin_gastro" style="display:inline-flex;align-items:center;gap:10px;padding:18px 30px;border-radius:999px;background:#163326;color:#F5EEE2;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#0F241A;color:#F5EEE2">{{ t.orderTg }}<span style="font-size:18px;line-height:1">→</span></a>
+      <a href="tel:+998900000000" style="display:inline-flex;align-items:center;padding:18px 30px;border-radius:999px;border:1.5px solid #163326;color:#163326;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#163326;color:#F5EEE2">{{ t.orderCall }}</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact" data-screen-label="Contact" style="scroll-margin-top:72px;background:#F5EEE2;color:#1C1F1A;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px)">
+  <div style="max-width:1200px;margin:0 auto">
+    <div style="font-size:12px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:#7A5A26">{{ t.contactEyebrow }}</div>
+    <h2 style="margin:18px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(40px,4.6vw,64px);line-height:1.04;color:#163326">{{ t.contactTitle }}</h2>
+    <div style="margin-top:48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px">
+      <sc-for list="{{ contacts }}" as="c" hint-placeholder-count="4">
+        <a href="{{ c.href }}" style="display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:176px;padding:28px;border-radius:20px;background:#FBF7F0;border:1px solid #E2D6C1;color:#163326;text-decoration:none" style-hover="border-color:#C9A96E;color:#163326">
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#7A5A26">{{ c.label }}</span>
+          <span style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:27px;font-weight:600;line-height:1.1;color:#163326">{{ c.value }}</span>
+            <span style="font-size:14px;color:#5E5A50">{{ c.hint }}</span>
+          </span>
+        </a>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="location" data-screen-label="Location" style="scroll-margin-top:72px;background:#163326;padding:clamp(72px,9vw,128px) clamp(20px,4vw,48px)">
+  <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(40px,5vw,72px);align-items:stretch">
+    <div style="display:flex;flex-direction:column;justify-content:center">
+      <div style="font-size:12px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:#C9A96E">{{ t.locEyebrow }}</div>
+      <h2 style="margin:18px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(40px,4.6vw,64px);line-height:1.04;color:#F5EEE2;text-wrap:balance">{{ t.locTitle }}</h2>
+      <div style="margin-top:36px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;flex-direction:column;gap:6px;padding-bottom:20px;border-bottom:1px solid rgba(201,169,110,0.25)"><span style="font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#C9A96E">{{ t.addrLabel }}</span><span style="font-size:18px;color:#F5EEE2">{{ t.locAddr }}</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#C9A96E">{{ t.hoursLabel }}</span><span style="font-size:18px;color:#F5EEE2">{{ t.hours }}</span></div>
+      </div>
+      <div style="margin-top:40px;display:flex;flex-wrap:wrap;gap:12px">
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=NRG+U-Tower+Tashkent" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">Google Maps<span style="font-size:17px;line-height:1">↗</span></a>
+        <a href="https://yandex.uz/maps/?text=NRG%20U-Tower%20Tashkent" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;border:1px solid rgba(245,238,226,0.5);color:#F5EEE2;font-size:15px;font-weight:600;text-decoration:none" style-hover="border-color:#E2C99A;color:#E2C99A">{{ t.mapYandex }}<span style="font-size:17px;line-height:1">↗</span></a>
+      </div>
+    </div>
+    <div style="position:relative;min-height:440px;border-radius:24px;overflow:hidden;border:1px solid rgba(201,169,110,0.35);background:#1E4232">
+      <iframe title="Map" src="https://maps.google.com/maps?q=NRG%20U-Tower%2C%20Tashkent&amp;z=16&amp;output=embed" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(0.4) sepia(0.12) contrast(1.02)"></iframe>
+    </div>
+  </div>
+</section>
+
+<footer style="background:#0F241A;border-top:1px solid rgba(201,169,110,0.18);padding:44px clamp(20px,4vw,48px)">
+  <div style="max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px 40px">
+    <div style="display:flex;flex-direction:column;align-items:center;line-height:1">
+      <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px;letter-spacing:0.06em;padding-left:0.06em;color:#E2C99A">YAQIN</span>
+      <span style="font-size:9px;font-weight:600;letter-spacing:0.44em;padding-left:0.44em;color:#C9A96E;margin-top:5px">GASTRO CAFE</span>
+    </div>
+    <nav style="display:flex;flex-wrap:wrap;gap:12px 28px">
+      <a href="Yaqin%20Menu.dc.html" style="font-size:14px;color:#EFE7D8;text-decoration:none" style-hover="color:#E2C99A">{{ t.nav.menu }}</a>
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+        <a href="{{ n.href }}" style="font-size:14px;color:#EFE7D8;text-decoration:none" style-hover="color:#E2C99A">{{ n.label }}</a>
+      </sc-for>
+    </nav>
+    <div style="font-size:13px;color:#A99F8B">© 2026 Yaqin Gastro Cafe</div>
+  </div>
+</footer>
+
+<sc-if value="{{ showSwitcher }}" hint-placeholder-val="{{ true }}">
+  <div style="position:fixed;left:16px;bottom:16px;z-index:60;display:flex;align-items:center;gap:4px;padding:5px;background:#FBF7F0;border:1px solid #DCCFB8;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,0.25)">
+    <span style="padding:0 8px 0 10px;font-size:10.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#5E5A50">Hero</span>
+    <sc-for list="{{ heroOpts }}" as="h" hint-placeholder-count="3">
+      <sc-if value="{{ h.active }}">
+        <button style="border:0;cursor:default;padding:7px 12px;border-radius:999px;background:#163326;color:#F5EEE2;font-size:12px;font-weight:700">{{ h.id }} {{ h.label }}</button>
+      </sc-if>
+      <sc-if value="{{ h.inactive }}">
+        <button onClick="{{ h.select }}" style="border:0;cursor:pointer;padding:7px 12px;border-radius:999px;background:transparent;color:#163326;font-size:12px;font-weight:600" style-hover="background:#EDE3D2">{{ h.id }} {{ h.label }}</button>
+      </sc-if>
+    </sc-for>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;heroVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1a&quot;,&quot;1b&quot;,&quot;1c&quot;],&quot;default&quot;:&quot;1a&quot;,&quot;tsType&quot;:&quot;'1a'|'1b'|'1c'&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;showSwitcher&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;}}">
+const T = {
+  ru: {
+    nav: { about: 'О нас', gallery: 'Атмосфера', contact: 'Контакты', location: 'Как добраться', menu: 'Меню' },
+    floor: 'NRG U-Tower  |  1 этаж',
+    tagline: 'Больше, чем просто кафе',
+    heroDesc: 'Сытные завтраки, ароматный кофе, свежая выпечка и горячие блюда — каждый день на первом этаже NRG U-Tower.',
+    ctaMenu: 'Смотреть меню', ctaOrder: 'Заказать онлайн',
+    hoursLabel: 'Часы работы', hours: 'Ежедневно 08:00 – 23:00',
+    addrLabel: 'Адрес', addrShort: 'NRG U-Tower, 1 этаж',
+    aboutEyebrow: 'О нас', aboutTitle: 'Место, куда хочется возвращаться',
+    aboutP1: '«Yaqin» по-узбекски значит «близкий» — именно так мы хотим, чтобы вы здесь себя чувствовали. Утренний кофе перед работой, неспешный обед с коллегами или ужин с семьёй.',
+    aboutP2: 'Мы готовим из свежих продуктов, печём каждое утро и подаём блюда так, как хотели бы, чтобы подавали нам.',
+    features: [
+      { title: 'Вкусные блюда', text: 'Европейская и узбекская кухня' },
+      { title: 'Кофе и десерты', text: 'Авторский кофе и выпечка' },
+      { title: 'Онлайн-заказ', text: 'Закажите заранее — заберёте без ожидания' }
+    ],
+    galleryEyebrow: 'Атмосфера', galleryTitle: 'Наш интерьер',
+    galleryDesc: 'Уютный зал с живой зеленью, мягким светом и тёплым деревом — для встреч, работы и отдыха.',
+    orderEyebrow: 'Онлайн-заказ', orderTitle: 'Закажите заранее — мы всё приготовим',
+    orderDesc: 'Оставьте заказ в Telegram или позвоните нам — он будет готов к вашему приходу.',
+    orderTg: 'Заказать в Telegram', orderCall: 'Позвонить',
+    contactEyebrow: 'Контакты', contactTitle: 'Свяжитесь с нами',
+    cPhone: 'Телефон', cHours: 'Часы работы',
+    cPhoneHint: 'Звоните ежедневно', cTgHint: 'Написать в чат', cIgHint: 'Подписаться', cHoursHint: 'Без выходных',
+    locEyebrow: 'Как добраться', locTitle: 'Ждём вас в NRG U-Tower', locAddr: 'NRG U-Tower, 1 этаж, Ташкент',
+    mapYandex: 'Яндекс Карты'
+  },
+  uz: {
+    nav: { about: 'Biz haqimizda', gallery: 'Muhit', contact: 'Aloqa', location: 'Manzil', menu: 'Menyu' },
+    floor: 'NRG U-Tower  |  1-qavat',
+    tagline: 'Shunchaki kafedan ko’proq',
+    heroDesc: 'To’yimli nonushtalar, xushbo’y qahva, yangi pishiriqlar va issiq taomlar — har kuni NRG U-Tower’ning birinchi qavatida.',
+    ctaMenu: 'Menyuni ko’rish', ctaOrder: 'Onlayn buyurtma',
+    hoursLabel: 'Ish vaqti', hours: 'Har kuni 08:00 – 23:00',
+    addrLabel: 'Manzil', addrShort: 'NRG U-Tower, 1-qavat',
+    aboutEyebrow: 'Biz haqimizda', aboutTitle: 'Yana qaytgingiz keladigan joy',
+    aboutP1: '«Yaqin» — bu sizga yaqin joy. Bu yerda o’zingizni uydagidek his qilishingizni istaymiz: ish oldidan ertalabki qahva, hamkasblar bilan shoshilmasdan tushlik yoki oila bilan kechki ovqat.',
+    aboutP2: 'Biz yangi mahsulotlardan tayyorlaymiz, har tong pishiriq yopamiz va taomlarni o’zimizga qanday tortilishini istasak, shunday tortamiz.',
+    features: [
+      { title: 'Mazali taomlar', text: 'Yevropa va o’zbek oshxonasi' },
+      { title: 'Qahva va desertlar', text: 'Mualliflik qahvasi va pishiriqlar' },
+      { title: 'Onlayn buyurtma', text: 'Oldindan buyurtma bering — kutmasdan oling' }
+    ],
+    galleryEyebrow: 'Muhit', galleryTitle: 'Bizning interyer',
+    galleryDesc: 'Jonli o’simliklar, yumshoq yorug’lik va iliq yog’och — uchrashuvlar, ish va dam olish uchun qulay zal.',
+    orderEyebrow: 'Onlayn buyurtma', orderTitle: 'Oldindan buyurtma bering — biz tayyorlab qo’yamiz',
+    orderDesc: 'Telegram orqali buyurtma qoldiring yoki qo’ng’iroq qiling — kelishingizga tayyor bo’ladi.',
+    orderTg: 'Telegram orqali buyurtma', orderCall: 'Qo’ng’iroq qilish',
+    contactEyebrow: 'Aloqa', contactTitle: 'Biz bilan bog’laning',
+    cPhone: 'Telefon', cHours: 'Ish vaqti',
+    cPhoneHint: 'Har kuni qo’ng’iroq qiling', cTgHint: 'Chatga yozish', cIgHint: 'Obuna bo’lish', cHoursHint: 'Dam olish kunlarisiz',
+    locEyebrow: 'Manzil', locTitle: 'Sizni NRG U-Tower’da kutamiz', locAddr: 'NRG U-Tower, 1-qavat, Toshkent',
+    mapYandex: 'Yandex Xaritalar'
+  },
+  en: {
+    nav: { about: 'About', gallery: 'Atmosphere', contact: 'Contact', location: 'Location', menu: 'Menu' },
+    floor: 'NRG U-Tower  |  1st floor',
+    tagline: 'More than just a cafe',
+    heroDesc: 'Hearty breakfasts, fragrant coffee, fresh pastries and hot dishes — every day on the first floor of NRG U-Tower.',
+    ctaMenu: 'View menu', ctaOrder: 'Order online',
+    hoursLabel: 'Opening hours', hours: 'Daily 08:00 – 23:00',
+    addrLabel: 'Address', addrShort: 'NRG U-Tower, 1st floor',
+    aboutEyebrow: 'Our story', aboutTitle: 'A place you’ll want to come back to',
+    aboutP1: '“Yaqin” means “close” in Uzbek — and that’s exactly how we want you to feel here. A morning coffee before work, an unhurried lunch with colleagues or dinner with family.',
+    aboutP2: 'We cook from fresh produce, bake every morning and serve each dish the way we’d like it served to us.',
+    features: [
+      { title: 'Great food', text: 'European and Uzbek cuisine' },
+      { title: 'Coffee & desserts', text: 'Specialty coffee and pastries' },
+      { title: 'Order online', text: 'Order ahead and skip the wait' }
+    ],
+    galleryEyebrow: 'Atmosphere', galleryTitle: 'Our interior',
+    galleryDesc: 'A cozy hall with living greenery, soft light and warm wood — for meetings, work and rest.',
+    orderEyebrow: 'Order online', orderTitle: 'Order ahead — we’ll have it ready',
+    orderDesc: 'Send your order via Telegram or give us a call, and it’ll be ready when you arrive.',
+    orderTg: 'Order via Telegram', orderCall: 'Call us',
+    contactEyebrow: 'Contact', contactTitle: 'Get in touch',
+    cPhone: 'Phone', cHours: 'Opening hours',
+    cPhoneHint: 'Call us any day', cTgHint: 'Message us', cIgHint: 'Follow us', cHoursHint: 'Open every day',
+    locEyebrow: 'Location', locTitle: 'Find us at NRG U-Tower', locAddr: 'NRG U-Tower, 1st floor, Tashkent',
+    mapYandex: 'Yandex Maps'
+  }
+};
+
+class Component extends DCLogic {
+  state = { lang: null, hero: null, w: window.innerWidth, menuOpen: false };
+
+  componentDidMount() {
+    try { const s = localStorage.getItem('yaqin-lang'); if (T[s]) this.setState({ lang: s }); } catch (e) {}
+    this._r = () => this.setState({ w: window.innerWidth });
+    window.addEventListener('resize', this._r);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._r); }
+  componentDidUpdate(p) {
+    if (p.heroVariant !== this.props.heroVariant && this.state.hero) this.setState({ hero: null });
+  }
+  setLang(l) {
+    try { localStorage.setItem('yaqin-lang', l); } catch (e) {}
+    this.setState({ lang: l });
+  }
+
+  renderVals() {
+    const lang = this.state.lang || 'ru';
+    const t = T[lang];
+    const hero = this.state.hero || this.props.heroVariant || '1a';
+    const wide = this.state.w >= 920;
+    const close = () => this.setState({ menuOpen: false });
+    const nav = [['about', '#about'], ['gallery', '#gallery'], ['contact', '#contact'], ['location', '#location']]
+      .map(([k, href]) => ({ label: t.nav[k], href, onClick: close }));
+    const langs = ['uz', 'ru', 'en'].map(c => ({
+      label: c.toUpperCase(), active: c === lang, inactive: c !== lang, select: () => this.setLang(c)
+    }));
+    const heroOpts = [['1a', 'Photo'], ['1b', 'Split'], ['1c', 'Editorial']].map(([id, label]) => ({
+      id, label, active: id === hero, inactive: id !== hero, select: () => this.setState({ hero: id })
+    }));
+    const spans = wide
+      ? [['span 2', 'span 2'], ['span 1', 'span 1'], ['span 1', 'span 2'], ['span 1', 'span 1']]
+      : [['span 2', 'span 1'], ['span 1', 'span 1'], ['span 1', 'span 2'], ['span 1', 'span 1']];
+    const gallery = spans.map(([col, row], i) => ({ id: 'gallery-' + (i + 1), col, row, ph: 'Interior photo ' + (i + 1) }));
+    const contacts = [
+      { label: t.cPhone, value: '+998 90 000 00 00', href: 'tel:+998900000000', hint: t.cPhoneHint },
+      { label: 'Telegram', value: '@yaqin_gastro', href: 'https://t.me/yaqin_gastro', hint: t.cTgHint },
+      { label: 'Instagram', value: '@yaqin.gastro', href: 'https://instagram.com/yaqin.gastro', hint: t.cIgHint },
+      { label: t.cHours, value: '08:00 – 23:00', href: '#location', hint: t.cHoursHint }
+    ];
+    return {
+      t, nav, langs, heroOpts, gallery, contacts,
+      heroA: hero === '1a', heroB: hero === '1b', heroC: hero === '1c',
+      wide, narrow: !wide, menuOpen: this.state.menuOpen && !wide,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      galCols: wide ? 'repeat(4, minmax(0, 1fr))' : 'repeat(2, minmax(0, 1fr))',
+      galRow: wide ? '260px' : '170px',
+      showSwitcher: this.props.showSwitcher ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>

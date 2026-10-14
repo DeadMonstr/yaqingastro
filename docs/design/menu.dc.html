@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Manrope:wght@400;500;600;700&amp;display=swap">
+<script src="./image-slot.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F5EEE2;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#163326;text-decoration:none}
+a:hover{color:#7A5A26}
+button{font:inherit}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#F5EEE2;font-family:'Manrope',system-ui,sans-serif;color:#1C1F1A">
+
+<header style="position:sticky;top:0;z-index:50;background:#0F241A;border-bottom:1px solid rgba(201,169,110,0.18)">
+  <div style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,48px);height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+    <a href="Yaqin%20Home.dc.html" style="display:flex;flex-direction:column;align-items:center;line-height:1;text-decoration:none">
+      <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:30px;letter-spacing:0.06em;padding-left:0.06em;color:#E2C99A">YAQIN</span>
+      <span style="font-size:8.5px;font-weight:600;letter-spacing:0.44em;padding-left:0.44em;color:#C9A96E;margin-top:4px">GASTRO CAFE</span>
+    </a>
+    <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;align-items:center;gap:clamp(20px,2.6vw,36px)">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+          <a href="{{ n.href }}" style="font-size:14px;font-weight:500;letter-spacing:0.02em;color:#EFE7D8;text-decoration:none" style-hover="color:#E2C99A">{{ n.label }}</a>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="display:flex;gap:2px;padding:3px;border:1px solid rgba(226,201,154,0.35);border-radius:999px">
+        <sc-for list="{{ langs }}" as="l" hint-placeholder-count="3">
+          <sc-if value="{{ l.active }}">
+            <button style="border:0;cursor:default;padding:6px 11px;border-radius:999px;background:#F5EEE2;color:#163326;font-size:12px;font-weight:700;letter-spacing:0.06em">{{ l.label }}</button>
+          </sc-if>
+          <sc-if value="{{ l.inactive }}">
+            <button onClick="{{ l.select }}" style="border:0;cursor:pointer;padding:6px 11px;border-radius:999px;background:transparent;color:#EFE7D8;font-size:12px;font-weight:600;letter-spacing:0.06em" style-hover="color:#E2C99A">{{ l.label }}</button>
+          </sc-if>
+        </sc-for>
+      </div>
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <a href="Yaqin%20Home.dc.html#order" style="display:inline-flex;align-items:center;padding:11px 20px;border-radius:999px;background:#C9A96E;color:#10261B;font-size:14px;font-weight:700;text-decoration:none" style-hover="background:#E2C99A;color:#10261B">{{ t.order }}</a>
+      </sc-if>
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1px solid rgba(226,201,154,0.35);border-radius:999px;background:transparent;cursor:pointer">
+          <span style="display:block;width:18px;height:1.5px;background:#F5EEE2"></span>
+          <span style="display:block;width:18px;height:1.5px;background:#F5EEE2"></span>
+          <span style="display:block;width:18px;height:1.5px;background:#F5EEE2"></span>
+        </button>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="border-top:1px solid rgba(201,169,110,0.18);padding:12px clamp(20px,4vw,48px) 28px;display:flex;flex-direction:column">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+        <a href="{{ n.href }}" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:500;color:#F5EEE2;padding:14px 0;border-bottom:1px solid rgba(201,169,110,0.18);text-decoration:none">{{ n.label }}</a>
+      </sc-for>
+      <a href="Yaqin%20Home.dc.html#order" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:600;color:#E2C99A;padding:14px 0;text-decoration:none">{{ t.order }}</a>
+    </div>
+  </sc-if>
+</header>
+
+<section data-screen-label="Menu intro" style="background:#163326;padding:clamp(48px,6vw,80px) clamp(20px,4vw,48px) clamp(36px,4vw,56px)">
+  <div style="max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px">
+    <div>
+      <div style="font-size:12px;font-weight:600;letter-spacing:0.26em;text-transform:uppercase;color:#C9A96E">Yaqin · Gastro Cafe</div>
+      <h1 style="margin:14px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(60px,8vw,112px);line-height:0.9;color:#F5EEE2">{{ t.title }}</h1>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;padding-bottom:8px">
+      <span style="font-size:15px;color:#F5EEE2">{{ t.hours }}</span>
+      <span style="font-size:14px;color:#CFC6B4">{{ t.note }}</span>
+    </div>
+  </div>
+</section>
+
+<div style="position:sticky;top:72px;z-index:40;background:rgba(245,238,226,0.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #E2D6C1">
+  <div id="menu-tabs" style="max-width:1280px;margin:0 auto;padding:14px clamp(20px,4vw,48px);display:flex;gap:8px;overflow-x:auto;scrollbar-width:none">
+    <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="5">
+      <sc-if value="{{ tab.active }}">
+        <button data-tab="{{ tab.id }}" onClick="{{ tab.go }}" style="flex:none;white-space:nowrap;cursor:pointer;padding:11px 20px;border-radius:999px;border:1px solid #163326;background:#163326;color:#F5EEE2;font-size:14px;font-weight:600">{{ tab.name }}</button>
+      </sc-if>
+      <sc-if value="{{ tab.inactive }}">
+        <button data-tab="{{ tab.id }}" onClick="{{ tab.go }}" style="flex:none;white-space:nowrap;cursor:pointer;padding:11px 20px;border-radius:999px;border:1px solid #D3C5AC;background:transparent;color:#163326;font-size:14px;font-weight:600" style-hover="border-color:#163326">{{ tab.name }}</button>
+      </sc-if>
+    </sc-for>
+  </div>
+</div>
+
+<main style="padding:0 clamp(20px,4vw,48px) clamp(72px,8vw,112px)">
+  <sc-for list="{{ cats }}" as="c" hint-placeholder-count="2">
+    <section id="cat-{{ c.id }}" data-screen-label="{{ c.label }}" style="max-width:1280px;margin:0 auto;padding-top:clamp(44px,5vw,64px)">
+      <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px">
+        <h2 style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(34px,4vw,50px);line-height:1;color:#163326;white-space:nowrap">{{ c.name }}</h2>
+        <span style="flex:1;height:1px;background:#D9CCB4"></span>
+      </div>
+      <sc-if value="{{ cards }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,264px),1fr));gap:18px">
+          <sc-for list="{{ c.items }}" as="d" hint-placeholder-count="4">
+            <article style="display:flex;flex-direction:column;background:#FBF7F0;border:1px solid #E6DBC8;border-radius:20px;overflow:hidden">
+              <div style="position:relative;aspect-ratio:4/3;background:#E9DFCE;color:#7A6A4E">
+                <image-slot id="dish-{{ d.id }}" shape="rect" placeholder="{{ d.ph }}" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding:18px 20px 20px">
+                <h3 style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:24px;line-height:1.12;color:#163326;text-wrap:balance">{{ d.name }}</h3>
+                <p style="flex:1;margin:0;font-size:14px;line-height:1.55;color:#5E5A50;text-wrap:pretty">{{ d.desc }}</p>
+                <div style="margin-top:10px;padding-top:14px;border-top:1px dashed #D9CCB4;display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                  <span style="font-size:13px;color:#6E6656">{{ d.weight }}</span>
+                  <span style="font-size:18px;font-weight:700;color:#163326;white-space:nowrap">{{ d.price }} <span style="font-size:13px;font-weight:600">{{ t.cur }}</span></span>
+                </div>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ list }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:14px">
+          <sc-for list="{{ c.items }}" as="d" hint-placeholder-count="4">
+            <article style="display:flex;align-items:center;gap:16px;padding:14px;background:#FBF7F0;border:1px solid #E6DBC8;border-radius:18px">
+              <div style="position:relative;flex:none;width:96px;height:96px;border-radius:14px;overflow:hidden;background:#E9DFCE;color:#7A6A4E">
+                <image-slot id="dish-{{ d.id }}" shape="rect" placeholder="Photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+              </div>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                  <h3 style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:21px;line-height:1.15;color:#163326">{{ d.name }}</h3>
+                  <span style="font-size:16px;font-weight:700;color:#163326;white-space:nowrap">{{ d.price }} <span style="font-size:12px;font-weight:600">{{ t.cur }}</span></span>
+                </div>
+                <p style="margin:0;font-size:13.5px;line-height:1.5;color:#5E5A50;text-wrap:pretty">{{ d.desc }}</p>
+                <span style="font-size:12.5px;color:#6E6656">{{ d.weight }}</span>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+      </sc-if>
+    </section>
+  </sc-for>
+</main>
+
+<footer style="background:#0F241A;border-top:1px solid rgba(201,169,110,0.18);padding:44px clamp(20px,4vw,48px)">
+  <div style="max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px 40px">
+    <div style="display:flex;flex-direction:column;align-items:center;line-height:1">
+      <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px;letter-spacing:0.06em;padding-left:0.06em;color:#E2C99A">YAQIN</span>
+      <span style="font-size:9px;font-weight:600;letter-spacing:0.44em;padding-left:0.44em;color:#C9A96E;margin-top:5px">GASTRO CAFE</span>
+    </div>
+    <nav style="display:flex;flex-wrap:wrap;gap:12px 28px">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+        <a href="{{ n.href }}" style="font-size:14px;color:#EFE7D8;text-decoration:none" style-hover="color:#E2C99A">{{ n.label }}</a>
+      </sc-for>
+    </nav>
+    <div style="font-size:13px;color:#A99F8B">© 2026 Yaqin Gastro Cafe</div>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;cardStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Photo cards&quot;,&quot;Compact list&quot;],&quot;default&quot;:&quot;Photo cards&quot;,&quot;tsType&quot;:&quot;'Photo cards'|'Compact list'&quot;,&quot;section&quot;:&quot;Menu&quot;}}">
+const HOME = 'Yaqin%20Home.dc.html';
+const T = {
+  ru: { nav: ['Главная', 'О нас', 'Контакты', 'Как добраться'], order: 'Заказать онлайн', title: 'Меню', hours: 'Ежедневно 08:00 – 23:00', note: 'Цены указаны в сумах', cur: 'сум', g: 'г', ml: 'мл' },
+  uz: { nav: ['Bosh sahifa', 'Biz haqimizda', 'Aloqa', 'Manzil'], order: 'Onlayn buyurtma', title: 'Menyu', hours: 'Har kuni 08:00 – 23:00', note: 'Narxlar so’mda ko’rsatilgan', cur: 'so’m', g: 'g', ml: 'ml' },
+  en: { nav: ['Home', 'About', 'Contact', 'Location'], order: 'Order online', title: 'Menu', hours: 'Daily 08:00 – 23:00', note: 'Prices in Uzbek sum (UZS)', cur: 'UZS', g: 'g', ml: 'ml' }
+};
+const NAV_HREFS = [HOME, HOME + '#about', HOME + '#contact', HOME + '#location'];
+
+// [id, ru, uz, en, descRu, descUz, descEn, amount, unit, price]
+const CATS = [
+  { id: 'breakfast', name: { ru: 'Завтраки', uz: 'Nonushtalar', en: 'Breakfast' }, items: [
+    ['eng-breakfast', 'Английский завтрак', 'Ingliz nonushtasi', 'English breakfast', 'Яичница, говяжий бекон, колбаски, фасоль, томаты гриль и тост.', 'Quymoq, mol go’shtidan bekon, kolbasachalar, loviya, grilda pomidor va tost.', 'Fried eggs, beef bacon, sausages, beans, grilled tomatoes and toast.', 420, 'g', 95000],
+    ['syrniki', 'Сырники со сметаной', 'Smetanali sirniki', 'Syrniki with sour cream', 'Творожные сырники со сметаной и ягодным соусом.', 'Tvorogli sirniki, smetana va rezavor sous bilan.', 'Cottage cheese pancakes with sour cream and berry sauce.', 250, 'g', 52000],
+    ['benedict', 'Яйца Бенедикт', 'Benedikt tuxumi', 'Eggs Benedict', 'Яйца пашот на бриоши с голландским соусом и шпинатом.', 'Brioshda pashot tuxum, gollandcha sous va ismaloq bilan.', 'Poached eggs on brioche with hollandaise and spinach.', 280, 'g', 68000],
+    ['shakshuka', 'Шакшука', 'Shakshuka', 'Shakshuka', 'Яйца, томлёные в пряном томатном соусе, с лепёшкой.', 'Ziravorli pomidor sousida pishirilgan tuxum, non bilan.', 'Eggs simmered in spiced tomato sauce, served with flatbread.', 320, 'g', 58000],
+    ['oatmeal', 'Овсяная каша с ягодами', 'Rezavorli suli bo’tqasi', 'Oatmeal with berries', 'На молоке, с мёдом, бананом и свежими ягодами.', 'Sutda, asal, banan va yangi rezavorlar bilan.', 'Cooked in milk, with honey, banana and fresh berries.', 300, 'g', 42000]
+  ]},
+  { id: 'drinks', name: { ru: 'Кофе и напитки', uz: 'Qahva va ichimliklar', en: 'Coffee & Drinks' }, items: [
+    ['cappuccino', 'Капучино', 'Kapuchino', 'Cappuccino', 'Двойной эспрессо и бархатная молочная пена.', 'Ikki hissa espresso va mayin sut ko’pigi.', 'Double espresso with velvety milk foam.', 300, 'ml', 38000],
+    ['flat-white', 'Флэт уайт', 'Flet uayt', 'Flat white', 'Насыщенный эспрессо с тонким слоем молока.', 'Quyuq espresso va yupqa sut qatlami.', 'Rich espresso with a thin layer of steamed milk.', 250, 'ml', 40000],
+    ['raf', 'Лавандовый раф', 'Lavandali raf', 'Lavender raf', 'Сливочный кофе с лавандовым сиропом.', 'Lavanda siropli qaymoqli qahva.', 'Creamy coffee with lavender syrup.', 350, 'ml', 45000],
+    ['matcha', 'Матча латте', 'Matcha latte', 'Matcha latte', 'Японский чай матча на молоке.', 'Sutli yapon matcha choyi.', 'Japanese matcha whisked with steamed milk.', 350, 'ml', 46000],
+    ['thyme-tea', 'Чай с чабрецом', 'Kakliko’tli choy', 'Thyme tea', 'Чёрный чай с чабрецом, лимоном и мёдом. Чайник.', 'Qora choy, kakliko’t, limon va asal bilan. Choynak.', 'Black tea with thyme, lemon and honey. Teapot.', 600, 'ml', 30000],
+    ['lemonade', 'Лимонад маракуйя', 'Marakuyya limonadi', 'Passion fruit lemonade', 'Освежающий лимонад с маракуйей и мятой.', 'Marakuyya va yalpizli tetiklantiruvchi limonad.', 'Refreshing lemonade with passion fruit and mint.', 400, 'ml', 42000]
+  ]},
+  { id: 'desserts', name: { ru: 'Выпечка и десерты', uz: 'Pishiriqlar va desertlar', en: 'Bakery & Desserts' }, items: [
+    ['cheesecake', 'Чизкейк Нью-Йорк', 'Nyu-York chizkeyki', 'New York cheesecake', 'Классический чизкейк с ягодным соусом.', 'Rezavor sousli klassik chizkeyk.', 'Classic baked cheesecake with berry sauce.', 150, 'g', 55000],
+    ['croissant', 'Круассан', 'Kruassan', 'Butter croissant', 'Слоёный круассан на сливочном масле.', 'Sariyog’li qatlamli kruassan.', 'Flaky all-butter croissant.', 80, 'g', 28000],
+    ['medovik', 'Медовик', 'Asalli tort', 'Honey cake', 'Тонкие медовые коржи со сметанным кремом.', 'Yupqa asalli qatlamlar, smetanali krem bilan.', 'Thin honey layers with sour cream frosting.', 160, 'g', 42000],
+    ['tiramisu', 'Тирамису', 'Tiramisu', 'Tiramisu', 'Савоярди, маскарпоне и эспрессо.', 'Savoyardi, maskarpone va espresso.', 'Savoiardi, mascarpone and espresso.', 170, 'g', 52000],
+    ['cinnamon-roll', 'Синнабон', 'Dolchinli bulochka', 'Cinnamon roll', 'Булочка с корицей и сливочным кремом.', 'Dolchinli bulochka, qaymoqli krem bilan.', 'Cinnamon roll with cream cheese frosting.', 130, 'g', 34000]
+  ]},
+  { id: 'salads', name: { ru: 'Салаты', uz: 'Salatlar', en: 'Salads' }, items: [
+    ['caesar', 'Цезарь с курицей', 'Tovuqli Sezar', 'Chicken Caesar', 'Романо, курица гриль, пармезан, крутоны и соус цезарь.', 'Romano, grilda tovuq, parmezan, kruton va Sezar sousi.', 'Romaine, grilled chicken, parmesan, croutons and Caesar dressing.', 280, 'g', 62000],
+    ['greek', 'Греческий', 'Yunoncha salat', 'Greek salad', 'Свежие овощи, фета, оливки и орегано.', 'Yangi sabzavotlar, feta, zaytun va oregano.', 'Fresh vegetables, feta, olives and oregano.', 260, 'g', 54000],
+    ['beef-salad', 'Тёплый салат с говядиной', 'Mol go’shtli iliq salat', 'Warm beef salad', 'Говядина, микс салатов, томаты черри и кунжутная заправка.', 'Mol go’shti, salat barglari, cherri pomidor va kunjutli sous.', 'Seared beef, mixed greens, cherry tomatoes and sesame dressing.', 250, 'g', 72000],
+    ['achichuk', 'Ачичук', 'Achchiq-chuchuk', 'Achichuk', 'Томаты, лук и острый перец по-узбекски.', 'Pomidor, piyoz va achchiq qalampir.', 'Uzbek tomato, onion and chili salad.', 220, 'g', 32000]
+  ]},
+  { id: 'soups', name: { ru: 'Первые блюда', uz: 'Sho’rvalar', en: 'Soups' }, items: [
+    ['pumpkin', 'Крем-суп из тыквы', 'Qovoqli krem-sho’rva', 'Pumpkin cream soup', 'С гренками, тыквенными семечками и сливками.', 'Suxari, qovoq urug’i va qaymoq bilan.', 'With croutons, pumpkin seeds and cream.', 300, 'ml', 46000],
+    ['shurpa', 'Шурпа', 'Sho’rva', 'Shurpa', 'Наваристый бульон из баранины с овощами.', 'Qo’y go’shtidan quyuq sho’rva, sabzavotlar bilan.', 'Rich lamb broth with vegetables.', 400, 'ml', 52000],
+    ['lentil', 'Чечевичный суп', 'Yasmiqli sho’rva', 'Lentil soup', 'Красная чечевица, лимон и зира.', 'Qizil yasmiq, limon va zira.', 'Red lentils, lemon and cumin.', 300, 'ml', 38000],
+    ['mushroom', 'Грибной крем-суп', 'Qo’ziqorinli krem-sho’rva', 'Mushroom cream soup', 'Шампиньоны, сливки и трюфельное масло.', 'Shampinyon, qaymoq va tryufel moyi.', 'Champignons, cream and truffle oil.', 300, 'ml', 48000]
+  ]}
+];
+const LI = { ru: 1, uz: 2, en: 3 };
+const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0');
+const OFFSET = 72 + 70 + 8;
+
+class Component extends DCLogic {
+  state = { lang: null, active: CATS[0].id, w: window.innerWidth, menuOpen: false };
+
+  componentDidMount() {
+    try { const s = localStorage.getItem('yaqin-lang'); if (T[s]) this.setState({ lang: s }); } catch (e) {}
+    this._r = () => this.setState({ w: window.innerWidth });
+    this._s = () => this.spy();
+    window.addEventListener('resize', this._r);
+    window.addEventListener('scroll', this._s, { passive: true });
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._r);
+    window.removeEventListener('scroll', this._s);
+  }
+  setLang(l) {
+    try { localStorage.setItem('yaqin-lang', l); } catch (e) {}
+    this.setState({ lang: l });
+  }
+  spy() {
+    if (this._lock && Date.now() < this._lock) return;
+    let cur = CATS[0].id;
+    for (const c of CATS) {
+      const el = document.getElementById('cat-' + c.id);
+      if (el && el.getBoundingClientRect().top - OFFSET - 40 <= 0) cur = c.id;
+    }
+    const doc = document.documentElement;
+    if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) cur = CATS[CATS.length - 1].id;
+    if (cur !== this.state.active) { this.setState({ active: cur }); this.centerTab(cur); }
+  }
+  centerTab(id) {
+    const bar = document.getElementById('menu-tabs');
+    const tab = bar && bar.querySelector('[data-tab="' + id + '"]');
+    if (tab) bar.scrollTo({ left: tab.offsetLeft - bar.clientWidth / 2 + tab.offsetWidth / 2, behavior: 'smooth' });
+  }
+  go(id) {
+    const el = document.getElementById('cat-' + id);
+    if (!el) return;
+    this._lock = Date.now() + 900;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - OFFSET + 30, behavior: 'smooth' });
+    this.setState({ active: id });
+    this.centerTab(id);
+  }
+
+  renderVals() {
+    const lang = this.state.lang || 'ru';
+    const t = T[lang];
+    const li = LI[lang];
+    const wide = this.state.w >= 920;
+    const cards = (this.props.cardStyle ?? 'Photo cards') !== 'Compact list';
+    const cats = CATS.map(c => ({
+      id: c.id, name: c.name[lang], label: c.name.en,
+      items: c.items.map(r => ({
+        id: r[0], name: r[li], desc: r[li + 3], ph: r[3] + ' photo',
+        weight: r[7] + ' ' + (r[8] === 'ml' ? t.ml : t.g), price: fmt(r[9])
+      }))
+    }));
+    const tabs = CATS.map(c => ({
+      id: c.id, name: c.name[lang], active: c.id === this.state.active, inactive: c.id !== this.state.active, go: () => this.go(c.id)
+    }));
+    const langs = ['uz', 'ru', 'en'].map(c => ({
+      label: c.toUpperCase(), active: c === lang, inactive: c !== lang, select: () => this.setLang(c)
+    }));
+    return {
+      t, cats, tabs, langs, cards, list: !cards,
+      nav: t.nav.map((label, i) => ({ label, href: NAV_HREFS[i] })),
+      wide, narrow: !wide, menuOpen: this.state.menuOpen && !wide,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen }))
+    };
+  }
+}
+</script>
+</body>
+</html>

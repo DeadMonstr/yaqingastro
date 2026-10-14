@@ -50,3 +50,16 @@ export function commonData(config, lang, path) {
     meta: { canonical: absolute(lang), alternates }
   }
 }
+
+// Ссылки из полей «Контакты» и «Как добраться». c — localizeContent().
+export function contactLinks(c) {
+  const query = encodeURIComponent(c['location.mapQuery'])
+  return {
+    tel: 'tel:' + c['contacts.phone'].replace(/[^\d+]/g, ''),
+    telegram: 'https://t.me/' + c['contacts.telegram'],
+    instagram: 'https://instagram.com/' + c['contacts.instagram'],
+    googleMaps: 'https://www.google.com/maps/search/?api=1&query=' + query,
+    yandexMaps: 'https://yandex.uz/maps/?text=' + query,
+    mapEmbed: 'https://maps.google.com/maps?q=' + query + '&z=16&output=embed'
+  }
+}

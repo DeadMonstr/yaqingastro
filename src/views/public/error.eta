@@ -1,4 +1,4 @@
-<% layout('./layout') %>
+<% layout('./layout', { mainClass: 'site-main--fill' }) %>
 <section class="error-page">
   <div class="error-page__inner">
     <p class="error-page__code"><%= it.code %></p>

@@ -1,0 +1,137 @@
+<% layout('./layout') %>
+<%
+const { c, links, ui } = it
+const features = [1, 2, 3]
+const gallery = [1, 2, 3, 4]
+const cards = [
+  { label: ui.cPhone, value: c['contacts.phone'], href: links.tel, hint: ui.cPhoneHint },
+  { label: 'Telegram', value: '@' + c['contacts.telegram'], href: links.telegram, hint: ui.cTgHint },
+  { label: 'Instagram', value: '@' + c['contacts.instagram'], href: links.instagram, hint: ui.cIgHint },
+  { label: ui.cHours, value: c['info.hoursShort'], href: '#location', hint: ui.cHoursHint }
+]
+%>
+<section class="hero" id="top">
+<% if (c['hero.image']) { %>
+  <img class="hero__bg" src="<%= c['hero.image'].src %>" srcset="<%= c['hero.image'].srcset %>" sizes="100vw" alt="" fetchpriority="high">
+<% } else { %>
+  <img class="hero__bg" src="<%= it.defaultHero %>" alt="" fetchpriority="high">
+<% } %>
+  <div class="hero__shade"></div>
+  <div class="hero__content">
+    <div class="hero__floor"><%= c['hero.floor'] %></div>
+    <h1 class="hero__title">YAQIN</h1>
+    <div class="hero__sub">GASTRO CAFE</div>
+    <div class="hero__rule"></div>
+    <p class="hero__tagline"><%= c['hero.tagline'] %></p>
+    <p class="hero__desc"><%= c['hero.description'] %></p>
+    <div class="hero__actions">
+      <a class="btn btn--gold btn--lg" href="<%= it.homeHref %>/menu"><%= ui.ctaMenu %><span class="btn__arrow" aria-hidden="true">→</span></a>
+      <a class="btn btn--outline btn--lg" href="#order"><%= ui.ctaOrder %></a>
+    </div>
+  </div>
+  <div class="hero__info">
+    <div class="hero__info-inner">
+      <div class="info-item"><span class="label"><%= ui.hoursLabel %></span><span class="info-item__value"><%= c['info.hours'] %></span></div>
+      <div class="info-item"><span class="label"><%= ui.addrLabel %></span><span class="info-item__value"><%= c['info.addressShort'] %></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section about" id="about">
+  <div class="about__inner">
+    <div class="about__photo">
+<%~ include('./partials/photo', { image: c['about.image'], sizes: '(min-width: 1248px) 552px, (min-width: 940px) 45vw, 100vw' }) %>
+    </div>
+    <div>
+      <div class="eyebrow"><%= ui.aboutEyebrow %></div>
+      <h2 class="section-title about__title"><%= c['about.title'] %></h2>
+      <p class="about__text about__text--first"><%= c['about.p1'] %></p>
+      <p class="about__text"><%= c['about.p2'] %></p>
+      <div class="features">
+<% for (const n of features) { %>
+        <div class="feature">
+          <div class="feature__title"><%= c['about.f' + n + '.title'] %></div>
+          <div class="feature__text"><%= c['about.f' + n + '.text'] %></div>
+        </div>
+<% } %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark gallery" id="gallery">
+  <div class="section__inner">
+    <div class="gallery__head">
+      <div>
+        <div class="eyebrow eyebrow--gold"><%= ui.galleryEyebrow %></div>
+        <h2 class="section-title section-title--light"><%= c['gallery.title'] %></h2>
+      </div>
+      <p class="gallery__desc"><%= c['gallery.description'] %></p>
+    </div>
+    <div class="gallery__grid">
+<% for (const n of gallery) { %>
+      <div class="gallery__item gallery__item--<%= n %>">
+<%~ include('./partials/photo', { image: c['gallery.image' + n], sizes: n === 1 ? '(min-width: 1376px) 632px, (min-width: 920px) 50vw, 100vw' : '(min-width: 1376px) 309px, (min-width: 920px) 25vw, 50vw' }) %>
+      </div>
+<% } %>
+    </div>
+  </div>
+</section>
+
+<section class="order" id="order">
+  <div class="order__inner">
+    <div class="order__text">
+      <div class="eyebrow eyebrow--strong"><%= ui.orderEyebrow %></div>
+      <h2 class="order__title"><%= c['order.title'] %></h2>
+      <p class="order__desc"><%= c['order.description'] %></p>
+    </div>
+    <div class="order__actions">
+      <a class="btn btn--dark btn--lg" href="<%= links.telegram %>"><%= ui.orderTg %><span class="btn__arrow" aria-hidden="true">→</span></a>
+      <a class="btn btn--outline-dark btn--lg" href="<%= links.tel %>"><%= ui.orderCall %></a>
+    </div>
+  </div>
+</section>
+
+<section class="section contact" id="contact">
+  <div class="contact__inner">
+    <div class="eyebrow"><%= ui.contactEyebrow %></div>
+    <h2 class="section-title"><%= ui.contactTitle %></h2>
+    <div class="contact__grid">
+<% for (const card of cards) { %>
+      <a class="contact-card" href="<%= card.href %>">
+        <span class="contact-card__label"><%= card.label %></span>
+        <span class="contact-card__body">
+          <span class="contact-card__value"><%= card.value %></span>
+          <span class="contact-card__hint"><%= card.hint %></span>
+        </span>
+      </a>
+<% } %>
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark location" id="location">
+  <div class="location__inner">
+    <div class="location__info">
+      <div class="eyebrow eyebrow--gold"><%= ui.locEyebrow %></div>
+      <h2 class="section-title section-title--light"><%= c['location.title'] %></h2>
+      <div class="location__facts">
+        <div class="location__fact">
+          <span class="label"><%= ui.addrLabel %></span>
+          <span class="location__value"><%= c['info.addressFull'] %></span>
+        </div>
+        <div class="location__fact">
+          <span class="label"><%= ui.hoursLabel %></span>
+          <span class="location__value"><%= c['info.hours'] %></span>
+        </div>
+      </div>
+      <div class="location__actions">
+        <a class="btn btn--gold btn--lg" href="<%= links.googleMaps %>" target="_blank" rel="noopener">Google Maps<span class="btn__arrow" aria-hidden="true">↗</span></a>
+        <a class="btn btn--outline btn--lg" href="<%= links.yandexMaps %>" target="_blank" rel="noopener"><%= ui.mapYandex %><span class="btn__arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+    <div class="location__map">
+      <iframe title="Map" loading="lazy" src="<%= links.mapEmbed %>"></iframe>
+    </div>
+  </div>
+</section>

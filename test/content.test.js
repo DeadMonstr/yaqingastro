@@ -85,9 +85,13 @@ test('validateGroupInput applies the textarea limit and skips image fields', () 
   assert.equal('about.image' in res.values, false)
 })
 
-test('localizeContent turns photos into { id } or null', () => {
+test('localizeContent turns photos into { id, src, srcset } or null', () => {
   const loc = localizeContent(resolveContent({ 'about.image': { image: 'about-1' } }), 'ru')
-  assert.deepEqual(loc['about.image'], { id: 'about-1' })
+  assert.deepEqual(loc['about.image'], {
+    id: 'about-1',
+    src: '/uploads/about-1-1400.webp',
+    srcset: '/uploads/about-1-800.webp 800w, /uploads/about-1-1400.webp 1400w'
+  })
   assert.equal(loc['hero.image'], null)
   assert.equal(loc['contacts.phone'], '+998 90 000 00 00')
 })

@@ -29,7 +29,7 @@
 </head>
 <body>
 <%~ include('./partials/header', it) %>
-<main class="site-main">
+<main class="site-main<%= it.mainClass ? ' ' + it.mainClass : '' %>">
 <%~ it.body %>
 </main>
 <%~ include('./partials/footer', it) %>

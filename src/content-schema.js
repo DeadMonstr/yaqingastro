@@ -1,4 +1,5 @@
 import { LANGS, tr } from './services/i18n.js'
+import { IMAGE_WIDTHS, imageKind, imageSrcset, imageUrl } from './services/images.js'
 
 const text = (key, label, def) => ({ key, type: 'text', translatable: true, label, default: def })
 const textarea = (key, label, def) => ({ key, type: 'textarea', translatable: true, label, default: def })
@@ -229,11 +230,17 @@ export function validateGroupInput(group, body) {
   return { values, errors }
 }
 
+// src — запасной адрес для браузеров без srcset: самый крупный вариант фото.
+function localizeImage(id) {
+  const widths = IMAGE_WIDTHS[imageKind(id)]
+  return { id, src: imageUrl(id, widths.at(-1)), srcset: imageSrcset(id) }
+}
+
 export function localizeContent(resolved, lang) {
   const localized = {}
   for (const field of FIELDS) {
     const value = resolved[field.key]
-    if (field.type === 'image') localized[field.key] = value ? { id: value } : null
+    if (field.type === 'image') localized[field.key] = value ? localizeImage(value) : null
     else if (field.translatable) localized[field.key] = tr(value, lang)
     else localized[field.key] = value
   }

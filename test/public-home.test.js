@@ -40,6 +40,13 @@ test('contacts and maps are built from content', async t => {
   assert.match(body, /yandex\.uz\/maps\/\?text=NRG%20U-Tower%2C%20Tashkent/)
 })
 
+test('the map frame title is localized', async t => {
+  const a = await app(t)
+  for (const [lang, title] of [['ru', 'Карта'], ['uz', 'Xarita'], ['en', 'Map']]) {
+    assert.match((await a.inject(`/${lang}`)).body, new RegExp(`<iframe title="${title}"`), lang)
+  }
+})
+
 test('hero uses the default photo until one is uploaded', async t => {
   const a = await app(t)
   assert.match((await a.inject('/ru')).body, /\/static\/img\/hero-default\.webp/)

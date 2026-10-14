@@ -131,7 +131,7 @@ const cards = [
       </div>
     </div>
     <div class="location__map">
-      <iframe title="Map" loading="lazy" src="<%= links.mapEmbed %>"></iframe>
+      <iframe title="<%= ui.mapTitle %>" loading="lazy" src="<%= links.mapEmbed %>"></iframe>
     </div>
   </div>
 </section>

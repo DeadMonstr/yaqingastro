@@ -11,8 +11,8 @@ test('home renders in each language', async t => {
   const r = await a.inject('/uz')
   assert.equal(r.statusCode, 200)
   assert.match(r.body, /<html lang="uz"/)
-  assert.match(r.body, /Shunchaki kafedan ko’proq/)
-  assert.match((await a.inject('/en')).body, /More than just a cafe/)
+  assert.match(r.body, /Yurakga va oshqozonga yaqin/)
+  assert.match((await a.inject('/en')).body, /Close to your heart and stomach/)
 })
 
 test('home remembers the language in a cookie', async t => {
@@ -33,11 +33,24 @@ test('saved content beats defaults and falls back to Russian', async t => {
 
 test('contacts and maps are built from content', async t => {
   const body = (await (await app(t)).inject('/ru')).body
-  assert.match(body, /href="tel:\+998900000000"/)
-  assert.match(body, /href="https:\/\/t\.me\/yaqin_gastro"/)
-  assert.match(body, /href="https:\/\/instagram\.com\/yaqin\.gastro"/)
+  assert.match(body, /href="tel:\+998776085555"/)
+  assert.match(body, /href="https:\/\/instagram\.com\/yaqin_gastro"/)
   assert.match(body, /maps\.google\.com\/maps\?q=NRG%20U-Tower%2C%20Tashkent&amp;z=16&amp;output=embed/)
   assert.match(body, /yandex\.uz\/maps\/\?text=NRG%20U-Tower%2C%20Tashkent/)
+})
+
+test('without Telegram the order button calls and the Telegram card is hidden', async t => {
+  const a = await app(t)
+  let body = (await a.inject('/ru')).body
+  assert.doesNotMatch(body, /t\.me\//)
+  assert.doesNotMatch(body, /Заказать в Telegram/)
+  assert.match(body, /<a class="btn btn--dark btn--lg" href="tel:\+998776085555">Позвонить/)
+
+  saveContent(a.db, { 'contacts.telegram': 'yaqin_tg', 'contacts.instagram': '' })
+  body = (await a.inject('/ru')).body
+  assert.match(body, /<a class="btn btn--dark btn--lg" href="https:\/\/t\.me\/yaqin_tg">Заказать в Telegram/)
+  assert.match(body, /<a class="contact-card" href="https:\/\/t\.me\/yaqin_tg">/)
+  assert.doesNotMatch(body, /instagram\.com/)
 })
 
 test('the map frame title is localized', async t => {
@@ -60,7 +73,7 @@ test('head links all language versions', async t => {
   const body = (await (await app(t)).inject('/ru')).body
   assert.match(body, /hreflang="uz" href="https:\/\/yaqin\.test\/uz"/)
   assert.match(body, /hreflang="x-default" href="https:\/\/yaqin\.test\/ru"/)
-  assert.match(body, /<title>YAQIN Gastro Cafe — Больше, чем просто кафе<\/title>/)
+  assert.match(body, /<title>YAQIN Gastro Cafe — Близко к сердцу и желудку<\/title>/)
 })
 
 test('content from the cabinet is escaped', async t => {

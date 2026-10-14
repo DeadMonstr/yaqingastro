@@ -21,8 +21,9 @@ test('schema has the seven groups from the spec in page order', () => {
 
 test('resolveContent uses mockup defaults and stored overrides', () => {
   const r = resolveContent({})
-  assert.equal(r['hero.tagline'].ru, 'Больше, чем просто кафе')
-  assert.equal(r['contacts.telegram'], 'yaqin_gastro')
+  assert.equal(r['hero.tagline'].ru, 'Близко к сердцу и желудку')
+  assert.equal(r['contacts.telegram'], '')
+  assert.equal(r['contacts.instagram'], 'yaqin_gastro')
   assert.equal(r['hero.image'], null)
   const r2 = resolveContent({ 'hero.tagline': { ru: 'Новый', uz: '', en: '' }, 'hero.image': { image: 'hero-abc' } })
   assert.equal(r2['hero.tagline'].ru, 'Новый')
@@ -82,6 +83,15 @@ test('usernames are taken from profile links and @handles', () => {
   }
 })
 
+test('an empty social field is valid and stays empty', () => {
+  const res = validateGroupInput(getGroup('contacts'), groupBody('contacts', { 'contacts.telegram': '  ', 'contacts.instagram': '' }))
+  assert.equal(res.errors['contacts.telegram'], undefined)
+  assert.equal(res.errors['contacts.instagram'], undefined)
+  assert.equal(res.values['contacts.telegram'], '')
+  assert.equal(res.values['contacts.instagram'], '')
+  assert.equal(resolveContent({ 'contacts.instagram': '' })['contacts.instagram'], '')
+})
+
 test('content repo round-trips JSON values', () => {
   const db = openDb(':memory:'); migrate(db)
   saveContent(db, { 'hero.tagline': { ru: 'A', uz: 'B', en: 'C' }, 'contacts.phone': '+998' })
@@ -116,7 +126,7 @@ test('localizeContent turns photos into { id, src, srcset } or null', () => {
     srcset: '/uploads/about-1-800.webp 800w, /uploads/about-1-1400.webp 1400w'
   })
   assert.equal(loc['hero.image'], null)
-  assert.equal(loc['contacts.phone'], '+998 90 000 00 00')
+  assert.equal(loc['contacts.phone'], '+998 77 608 55 55')
 })
 
 test('saveContent upserts existing keys and deleteContent drops several', () => {

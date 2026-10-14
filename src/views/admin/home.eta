@@ -77,7 +77,7 @@
 <%     if (field.error) { %>
         <p class="field-error" id="<%= field.key %>-error"><%= field.error %></p>
 <%     } else if (field.type === 'username') { %>
-        <p class="field__hint">Имя или ссылка: на сайте сохранится только имя</p>
+        <p class="field__hint">Имя или ссылка: на сайте сохранится только имя. Пустое поле скрывает соцсеть на сайте</p>
 <%     } %>
       </div>
 <%   } %>

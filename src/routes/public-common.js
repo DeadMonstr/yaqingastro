@@ -52,12 +52,14 @@ export function commonData(config, lang, path) {
 }
 
 // Ссылки из полей «Контакты» и «Как добраться». c — localizeContent().
+// Соцсеть с пустым именем получает null: на сайте её нет.
 export function contactLinks(c) {
   const query = encodeURIComponent(c['location.mapQuery'])
+  const profile = (base, name) => (name ? base + name : null)
   return {
     tel: 'tel:' + c['contacts.phone'].replace(/[^\d+]/g, ''),
-    telegram: 'https://t.me/' + c['contacts.telegram'],
-    instagram: 'https://instagram.com/' + c['contacts.instagram'],
+    telegram: profile('https://t.me/', c['contacts.telegram']),
+    instagram: profile('https://instagram.com/', c['contacts.instagram']),
     googleMaps: 'https://www.google.com/maps/search/?api=1&query=' + query,
     yandexMaps: 'https://yandex.uz/maps/?text=' + query,
     mapEmbed: 'https://maps.google.com/maps?q=' + query + '&z=16&output=embed'

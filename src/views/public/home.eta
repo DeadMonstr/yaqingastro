@@ -8,7 +8,7 @@ const cards = [
   { label: 'Telegram', value: '@' + c['contacts.telegram'], href: links.telegram, hint: ui.cTgHint },
   { label: 'Instagram', value: '@' + c['contacts.instagram'], href: links.instagram, hint: ui.cIgHint },
   { label: ui.cHours, value: c['info.hoursShort'], href: '#location', hint: ui.cHoursHint }
-]
+].filter(card => card.href)
 %>
 <section class="hero" id="top">
 <% if (c['hero.image']) { %>
@@ -86,8 +86,12 @@ const cards = [
       <p class="order__desc"><%= c['order.description'] %></p>
     </div>
     <div class="order__actions">
+<% if (links.telegram) { %>
       <a class="btn btn--dark btn--lg" href="<%= links.telegram %>"><%= ui.orderTg %><span class="btn__arrow" aria-hidden="true">→</span></a>
       <a class="btn btn--outline-dark btn--lg" href="<%= links.tel %>"><%= ui.orderCall %></a>
+<% } else { %>
+      <a class="btn btn--dark btn--lg" href="<%= links.tel %>"><%= ui.orderCall %><span class="btn__arrow" aria-hidden="true">→</span></a>
+<% } %>
     </div>
   </div>
 </section>

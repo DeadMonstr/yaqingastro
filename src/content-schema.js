@@ -14,19 +14,19 @@ export const CONTENT_SCHEMA = [
     title: 'Первый экран',
     fields: [
       text('hero.floor', 'Строка над названием', {
-        ru: 'NRG U-Tower  |  1 этаж',
-        uz: 'NRG U-Tower  |  1-qavat',
-        en: 'NRG U-Tower  |  1st floor'
+        ru: 'NRG U-Tower  |  24/7',
+        uz: 'NRG U-Tower  |  24/7',
+        en: 'NRG U-Tower  |  24/7'
       }),
       text('hero.tagline', 'Слоган', {
-        ru: 'Больше, чем просто кафе',
-        uz: 'Shunchaki kafedan ko’proq',
-        en: 'More than just a cafe'
+        ru: 'Близко к сердцу и желудку',
+        uz: 'Yurakga va oshqozonga yaqin',
+        en: 'Close to your heart and stomach'
       }),
       textarea('hero.description', 'Описание', {
-        ru: 'Сытные завтраки, ароматный кофе, свежая выпечка и горячие блюда — каждый день на первом этаже NRG U-Tower.',
-        uz: 'To’yimli nonushtalar, xushbo’y qahva, yangi pishiriqlar va issiq taomlar — har kuni NRG U-Tower’ning birinchi qavatida.',
-        en: 'Hearty breakfasts, fragrant coffee, fresh pastries and hot dishes — every day on the first floor of NRG U-Tower.'
+        ru: 'Сытные завтраки, ароматный кофе, свежая выпечка и горячие блюда — круглосуточно в NRG U-Tower.',
+        uz: 'To’yimli nonushtalar, xushbo’y qahva, yangi pishiriqlar va issiq taomlar — NRG U-Tower’da kecha-kunduz.',
+        en: 'Hearty breakfasts, fragrant coffee, fresh pastries and hot dishes — around the clock at NRG U-Tower.'
       }),
       image('hero.image', 'Фото', 'hero')
     ]
@@ -36,20 +36,20 @@ export const CONTENT_SCHEMA = [
     title: 'Часы и адрес',
     fields: [
       text('info.hours', 'Часы работы', {
-        ru: 'Ежедневно 08:00 – 23:00',
-        uz: 'Har kuni 08:00 – 23:00',
-        en: 'Daily 08:00 – 23:00'
+        ru: 'Круглосуточно, без выходных',
+        uz: 'Har kuni, kecha-kunduz',
+        en: 'Open 24/7, every day'
       }),
-      plain('info.hoursShort', 'Часы работы (кратко)', '08:00 – 23:00'),
+      plain('info.hoursShort', 'Часы работы (кратко)', '24/7'),
       text('info.addressShort', 'Адрес (кратко)', {
-        ru: 'NRG U-Tower, 1 этаж',
-        uz: 'NRG U-Tower, 1-qavat',
-        en: 'NRG U-Tower, 1st floor'
+        ru: 'NRG U-Tower, ул. Шукура Бурханова, 22',
+        uz: 'NRG U-Tower, Shukur Burxonov ko’chasi, 22',
+        en: 'NRG U-Tower, 22 Shukur Burkhanov St'
       }),
       text('info.addressFull', 'Адрес (полностью)', {
-        ru: 'NRG U-Tower, 1 этаж, Ташкент',
-        uz: 'NRG U-Tower, 1-qavat, Toshkent',
-        en: 'NRG U-Tower, 1st floor, Tashkent'
+        ru: 'NRG U-Tower, ул. Шукура Бурханова, 22, Мирзо-Улугбекский район, Ташкент',
+        uz: 'NRG U-Tower, Shukur Burxonov ko’chasi, 22, Mirzo-Ulug’bek tumani, Toshkent',
+        en: 'NRG U-Tower, 22 Shukur Burkhanov St, Mirzo-Ulugbek district, Tashkent'
       })
     ]
   },
@@ -135,9 +135,9 @@ export const CONTENT_SCHEMA = [
         en: 'Order ahead — we’ll have it ready'
       }),
       textarea('order.description', 'Описание', {
-        ru: 'Оставьте заказ в Telegram или позвоните нам — он будет готов к вашему приходу.',
-        uz: 'Telegram orqali buyurtma qoldiring yoki qo’ng’iroq qiling — kelishingizga tayyor bo’ladi.',
-        en: 'Send your order via Telegram or give us a call, and it’ll be ready when you arrive.'
+        ru: 'Позвоните нам — и заказ будет готов к вашему приходу.',
+        uz: 'Bizga qo’ng’iroq qiling — buyurtmangiz kelishingizga tayyor bo’ladi.',
+        en: 'Give us a call, and your order will be ready when you arrive.'
       })
     ]
   },
@@ -145,9 +145,9 @@ export const CONTENT_SCHEMA = [
     id: 'contacts',
     title: 'Контакты',
     fields: [
-      phone('contacts.phone', 'Телефон', '+998 90 000 00 00'),
-      username('contacts.telegram', 'Telegram', 'yaqin_gastro'),
-      username('contacts.instagram', 'Instagram', 'yaqin.gastro')
+      phone('contacts.phone', 'Телефон', '+998 77 608 55 55'),
+      username('contacts.telegram', 'Telegram', ''),
+      username('contacts.instagram', 'Instagram', 'yaqin_gastro')
     ]
   },
   {
@@ -223,7 +223,11 @@ function usernameOf(value) {
 function validateSingle(field, body) {
   let value = asText(body[field.key])
 
-  if (field.type === 'username') value = usernameOf(value)
+  // Пустое поле соцсети скрывает её на сайте. Ссылка без имени («instagram.com/») — ошибка.
+  if (field.type === 'username') {
+    if (value === '') return { value }
+    value = usernameOf(value)
+  }
 
   if (tooLong(value, field.type)) return { value, error: tooLongError(field.type) }
   if (field.type === 'plain' && value === '') return { value, error: 'Заполните поле' }

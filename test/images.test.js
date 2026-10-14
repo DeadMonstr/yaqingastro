@@ -62,12 +62,18 @@ test('save rejects an unknown kind', async () => {
   assert.deepEqual(fs.readdirSync(dir), [])
 })
 
-test('save leaves no files behind when writing fails', { skip: process.getuid?.() === 0 }, async t => {
+test('save removes the files already written when a later write fails', async t => {
   const { dir, images } = store()
   const buffer = await jpeg()
-  fs.chmodSync(dir, 0o500)
-  t.after(() => fs.chmodSync(dir, 0o700))
-  await assert.rejects(images.save('dish', buffer), err => !(err instanceof ImageError))
+  const writeFile = fs.promises.writeFile
+  const injected = new Error('disk full')
+  let calls = 0
+  t.mock.method(fs.promises, 'writeFile', (...args) =>
+    ++calls === 2 ? Promise.reject(injected) : writeFile(...args)
+  )
+
+  await assert.rejects(images.save('dish', buffer), err => err === injected)
+  assert.equal(calls, 2)
   assert.deepEqual(fs.readdirSync(dir), [])
 })
 

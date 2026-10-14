@@ -16,6 +16,7 @@ import { createImageStore } from './services/images.js'
 import { DEFAULT_LANG, isLang } from './services/i18n.js'
 import { commonData } from './routes/public-common.js'
 import publicRoutes from './routes/public.js'
+import adminRoutes from './routes/admin/index.js'
 
 const ROOT = path.join(import.meta.dirname, '..')
 const VIEWS_DIR = path.join(import.meta.dirname, 'views')
@@ -97,6 +98,7 @@ export async function buildApp(config) {
   })
 
   await app.register(publicRoutes)
+  await app.register(adminRoutes, { prefix: '/admin' })
 
   app.setNotFoundHandler((request, reply) =>
     renderError(app, request, reply, 404, 'notFoundTitle', 'notFoundText'))

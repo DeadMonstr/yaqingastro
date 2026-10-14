@@ -1,0 +1,35 @@
+<% layout('./layout') %>
+<%
+const errors = it.errors || {}
+const fields = [
+  { name: 'current', label: 'Текущий пароль', autocomplete: 'current-password' },
+  { name: 'password', label: 'Новый пароль', autocomplete: 'new-password', hint: 'Не короче 8 символов' },
+  { name: 'repeat', label: 'Повторите новый пароль', autocomplete: 'new-password' }
+]
+%>
+<h1 class="page-title">Аккаунт</h1>
+<p class="muted">Вы вошли как <strong><%= it.user.login %></strong></p>
+
+<form class="card" method="post" action="/admin/account/password">
+  <h2 class="card__title">Смена пароля</h2>
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+<% for (const f of fields) { %>
+  <div class="field<%= errors[f.name] ? ' field--error' : '' %>">
+    <label class="field__label" for="<%= f.name %>"><%= f.label %></label>
+    <input class="field__input" id="<%= f.name %>" name="<%= f.name %>" type="password" autocomplete="<%= f.autocomplete %>" required<% if (errors[f.name]) { %> aria-invalid="true" aria-describedby="<%= f.name %>-error"<% } %>>
+<% if (errors[f.name]) { %>
+    <p class="field__error" id="<%= f.name %>-error"><%= errors[f.name] %></p>
+<% } else if (f.hint) { %>
+    <p class="field__hint"><%= f.hint %></p>
+<% } %>
+  </div>
+<% } %>
+  <div class="form-actions">
+    <button class="btn btn--primary btn--block" type="submit">Сменить пароль</button>
+  </div>
+</form>
+
+<form class="logout" method="post" action="/admin/logout">
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+  <button class="btn btn--outline btn--block" type="submit">Выйти</button>
+</form>

@@ -1,0 +1,7 @@
+<% layout('./layout') %>
+<section class="error-block">
+  <p class="error-block__code"><%= it.code %></p>
+  <h1 class="page-title"><%= it.title %></h1>
+  <p class="error-block__text"><%= it.text %></p>
+  <a class="btn btn--outline" href="/admin">В кабинет</a>
+</section>

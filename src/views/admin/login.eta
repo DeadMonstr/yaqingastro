@@ -1,0 +1,18 @@
+<% layout('./layout') %>
+<h1 class="page-title">Вход</h1>
+<form class="card" method="post" action="/admin/login">
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+  <input type="hidden" name="next" value="<%= it.next %>">
+<% if (it.error) { %>
+  <p class="alert" role="alert"><%= it.error %></p>
+<% } %>
+  <div class="field">
+    <label class="field__label" for="login">Логин</label>
+    <input class="field__input" id="login" name="login" type="text" value="<%= it.login %>" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
+  </div>
+  <div class="field">
+    <label class="field__label" for="password">Пароль</label>
+    <input class="field__input" id="password" name="password" type="password" autocomplete="current-password" required>
+  </div>
+  <button class="btn btn--primary btn--block" type="submit">Войти</button>
+</form>

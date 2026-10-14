@@ -23,13 +23,13 @@ ADMIN_LOGIN=admin
 ADMIN_PASSWORD=<пароль не короче 8 символов>
 ```
 
-`SESSION_SECRET` в режиме `development` можно не задавать. Запуск с перечитыванием при правках:
+`SESSION_SECRET` в режиме `development` можно не задавать. Запуск с перезапуском при правках в коде:
 
 ```bash
-node --env-file=.env --watch src/server.js
+npm run dev
 ```
 
-Это то же самое, что `npm run dev`, но с чтением `.env`: сам `npm run dev` файл `.env` не читает, поэтому без `--env-file` переменные придётся передавать в командной строке:
+Скрипт сам читает `.env`, если файл есть. Без `.env` переменные можно передать в командной строке:
 
 ```bash
 ADMIN_LOGIN=admin ADMIN_PASSWORD='пароль-не-короче-8' npm run dev

@@ -1,4 +1,0 @@
-yaqin.uz {
-	encode zstd gzip
-	reverse_proxy localhost:3000
-}

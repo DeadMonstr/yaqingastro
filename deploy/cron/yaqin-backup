@@ -1,0 +1,3 @@
+# Ежедневный бэкап базы Yaqin Gastro Cafe в /opt/yaqin/data/backups (03:00 по Ташкенту).
+# Копии старше 30 дней удаляются. Журнал: journalctl -t yaqin-backup
+0 22 * * * ubuntu cd /opt/yaqin && docker compose exec -T app npm run --silent backup 2>&1 | logger -t yaqin-backup; find /opt/yaqin/data/backups -name "yaqin-*.db" -mtime +30 -delete
